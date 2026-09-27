@@ -1,6 +1,6 @@
 # 📦 ULD-Beladung: Volumen gegen Schwerpunkt
 
-*(noch nicht deployed)*
+**[→ Demo live ausprobieren](https://sebastianhanisch-uld-gewicht-demo.streamlit.app/)**
 
 Ausbau von [`pack_demo`](https://github.com/sebastian-hanisch/pack_demo) (Extreme-Point-Verfahren fuer Luftfracht-ULDs, hebt dessen Annahme
 "keine Gewichtsverteilung" gezielt auf): ein ULD wird nach Volumen gepackt, ohne auf das Gewicht der Boxen zu achten - haelt das automatisch
