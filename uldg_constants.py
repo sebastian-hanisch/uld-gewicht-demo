@@ -1,7 +1,7 @@
 """ULD-Beladung: Volumen gegen Schwerpunkt - feste Annahmen, Reglerstufen, Presets, Farben."""
 from uldg_model import GERUNDET, RECHTECK
 
-# Container (Groessenordnung LD3), siehe messreihe_uld_gewicht/ERGEBNIS.md
+# Container (Größenordnung LD3), siehe messreihe_uld_gewicht/ERGEBNIS.md
 W, D, H, CHAMFER = 160.0, 150.0, 160.0, 40.0
 
 CONTOUR_OPTIONS = (RECHTECK, GERUNDET)

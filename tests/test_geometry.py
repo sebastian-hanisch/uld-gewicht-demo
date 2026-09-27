@@ -1,6 +1,6 @@
-"""Korrektheits-Checks fuer uldg_geometry.py - uebernommen aus
+"""Korrektheits-Checks für uldg_geometry.py - übernommen aus
 packen-planung/messreihe_uld_gewicht/check.py (dort als Skript, hier als pytest), Checks 7-10, 12-14
-(Ueberlappung, Zufallspackungen, Grenzfaelle, die beiden PFLICHT-Regressionstests, Determinismus)."""
+(Ueberlappung, Zufallspackungen, Grenzfälle, die beiden PFLICHT-Regressionstests, Determinismus)."""
 from __future__ import annotations
 
 import numpy as np
@@ -27,7 +27,7 @@ def test_ueberlappung_kante_an_kante_ueberlappt_nicht():
 
 
 def test_viele_zufallspackungen_ohne_fehler():
-    """Check 8: Gewichtserhaltung und keine Ueberlappung ueber viele Zufallsinstanzen, beide Heuristiken,
+    """Check 8: Gewichtserhaltung und keine Ueberlappung über viele Zufallsinstanzen, beide Heuristiken,
     beide Konturen (300 Instanzen x 2 Konturen x 2 Regeln = 1200 Packungen, wie im Original)."""
     rng = np.random.default_rng(1)
     n_checked = 0
@@ -67,7 +67,7 @@ def test_keine_boxen_auslastung_null():
 
 
 def test_wuerfel_gleich_container_fuellt_rechteck_voll():
-    """Check 10a: ein Wuerfel exakt so gross wie der Container fuellt ihn zu 100 % (Rechteck-Kontur)."""
+    """Check 10a: ein Würfel exakt so groß wie der Container füllt ihn zu 100 % (Rechteck-Kontur)."""
     big = Box(W, D, H, 1)
     placed, unplaced = pack_greedy_volume([big], W, D, H, RECHTECK, CHAMFER)
     assert len(placed) == 1 and unplaced == []
@@ -75,16 +75,16 @@ def test_wuerfel_gleich_container_fuellt_rechteck_voll():
 
 
 def test_wuerfel_passt_nicht_in_gerundete_kontur():
-    """Check 10b: derselbe Wuerfel passt NICHT in die gerundete Kontur (Ecken ragen heraus)."""
+    """Check 10b: derselbe Würfel passt NICHT in die gerundete Kontur (Ecken ragen heraus)."""
     big = Box(W, D, H, 1)
     placed, unplaced = pack_greedy_volume([big], W, D, H, GERUNDET, CHAMFER)
     assert len(placed) == 0 and len(unplaced) == 1
 
 
 def test_regression_gerundete_kontur_platziert_wieder_etwas():
-    """Check 12 - PFLICHT-Regressionstest fuer den beim Bauen gefundenen Bug: die gerundete Kontur schneidet
+    """Check 12 - PFLICHT-Regressionstest für den beim Bauen gefundenen Bug: die gerundete Kontur schneidet
     genau den Ursprung ab; die Extreme-Point-Heuristik startete anfangs nur dort, wodurch 0 von 200 Instanzen
-    ueberhaupt etwas platzierten (Nullspalten-Signal, siehe feedback_all_zero_result_column_is_a_bug_signal).
+    überhaupt etwas platzierten (Nullspalten-Signal, siehe feedback_all_zero_result_column_is_a_bug_signal).
     Behoben durch eigene Start-Kandidaten an den Eckpunkten der Kontur (uldg_geometry._seed_points)."""
     rng = np.random.default_rng(7)
     placed_any = False
@@ -101,8 +101,8 @@ def test_regression_schwerpunktregel_senkt_offset_messbar():
     """Check 13 - PFLICHT-Regressionstest (Nullspalten-Falle, Zweig-Test je Regel): die schwerpunkt-bewusste
     Regel H_cg muss auf einer konstruierten Instanz (eine schwere Box + viele leichte) den Offset messbar
     kleiner machen als H_vol - sonst wirkt der Bodenraster-Regler nicht (die Regel hatte anfangs sogar
-    HOEHERE Verletzungsraten, weil der ersten, schwersten Box nur der Ursprung als Kandidat zur Verfuegung
-    stand; behoben durch das zusaetzliche Bodenraster in uldg_geometry._floor_grid)."""
+    HOEHERE Verletzungsraten, weil der ersten, schwersten Box nur der Ursprung als Kandidat zur Verfügung
+    stand; behoben durch das zusätzliche Bodenraster in uldg_geometry._floor_grid)."""
     heavy_light = [Box(30, 30, 30, 500)] + [Box(15, 15, 15, 1) for _ in range(10)]
     pv, _ = pack_greedy_volume(heavy_light, W, D, H, RECHTECK, CHAMFER)
     pc, _ = pack_cg_aware(heavy_light, W, D, H, RECHTECK, CHAMFER)
@@ -132,20 +132,20 @@ def test_floor_grid_enthaelt_den_letzten_erreichbaren_schritt_in_y():
 
 
 def test_try_place_tie_break_bevorzugt_den_zuerst_gefundenen_kandidaten():
-    """Kandidatenlisten-Reihenfolge kann einen scheinbaren Vorteil vortaeuschen (Bestfit-Tiebreak-Fall,
-    siehe feedback_bestfit_tiebreak_order_artefact) - hier ausdruecklich geprueft: bei einem EXAKTEN
+    """Kandidatenlisten-Reihenfolge kann einen scheinbaren Vorteil vortäuschen (Bestfit-Tiebreak-Fall,
+    siehe feedback_bestfit_tiebreak_order_artefact) - hier ausdrücklich geprüft: bei einem EXAKTEN
     Distanz-Gleichstand zwischen zwei Kandidaten muss `try_place` den in der sortierten Kandidatenliste
-    ZUERST auftretenden waehlen (deterministisch, kein Sich-selbst-Ueberschreiben durch spaetere Gleichstaende).
+    ZUERST auftretenden wählen (deterministisch, kein Sich-selbst-Ueberschreiben durch spätere Gleichstände).
     Konstruierte Instanz: target=(60, 70), Box 20x20x20 -> die Kandidaten (x=40, y=60) und (x=60, y=60) sind
-    beide exakt 100 (Boxmitte-Distanz-Quadrat) von target entfernt und die naechstgelegenen ueberhaupt;
-    (x=40, y=60) kommt in der sortierten Kandidatenliste (Schluessel z, y, x) zuerst."""
+    beide exakt 100 (Boxmitte-Distanz-Quadrat) von target entfernt und die nächstgelegenen überhaupt;
+    (x=40, y=60) kommt in der sortierten Kandidatenliste (Schlüssel z, y, x) zuerst."""
     box = Box(20, 20, 20, 5)
     p = try_place(box, [], 160.0, 150.0, 160.0, RECHTECK, 40.0, target=(60.0, 70.0), with_floor_grid=True)
     assert (p.x, p.y, p.z) == (40.0, 60.0, 0.0)
 
 
 def test_make_boxes_gewichtsformel_volumen_mal_dichte_durch_1000():
-    """Die Gewichtsformel `w * d * h * density / 1000.0` direkt gegen einen Fall pruefen, in dem die Dichte
+    """Die Gewichtsformel `w * d * h * density / 1000.0` direkt gegen einen Fall prüfen, in dem die Dichte
     deterministisch 1,0 ist (Dichtestreuung CV = 0 -> keine Zufallsstreuung um den Mittelwert 1,0)."""
     rng = np.random.default_rng(5)
     boxes = make_boxes(rng, 1, 0.0)
@@ -169,7 +169,7 @@ class _FixedRNG:
 
 def test_make_boxes_dichte_bodenwert_ist_005():
     """Eine sehr niedrige (auch negative) gezogene Dichte wird auf den Bodenwert 0,05 begrenzt, nie auf 0
-    oder negativ (sonst gaebe es Boxen mit Gewicht <= 0)."""
+    oder negativ (sonst gäbe es Boxen mit Gewicht <= 0)."""
     rng = _FixedRNG(normal_value=-10.0)
     boxes = make_boxes(rng, 1, 0.5)
     b = boxes[0]
@@ -178,8 +178,8 @@ def test_make_boxes_dichte_bodenwert_ist_005():
 
 @pytest.mark.parametrize("contour", [RECHTECK, GERUNDET])
 def test_h_cg_unterscheidet_sich_von_h_vol_auf_frischer_instanz(contour):
-    """Zusaetzlicher Zweig-Test (Nullspalten-Falle): H_cg muss auf einer frischen Zufallsinstanz eine andere
-    Platzierung liefern als H_vol (sonst waere der Regler 'Schwerpunkt-bewusste Regel' ein wirkungsloser
+    """Zusätzlicher Zweig-Test (Nullspalten-Falle): H_cg muss auf einer frischen Zufallsinstanz eine andere
+    Platzierung liefern als H_vol (sonst wäre der Regler 'Schwerpunkt-bewusste Regel' ein wirkungsloser
     Regler, siehe DEMO-PLAYBOOK Abschnitt 3)."""
     rng = np.random.default_rng(123)
     boxes = make_boxes(rng, 16, 0.3)

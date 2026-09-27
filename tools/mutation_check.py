@@ -1,20 +1,20 @@
-"""Fehler-Einbau-Test fuer die beiden Kernmodule (uldg_model.py, uldg_geometry.py): baut einzeln einen Fehler
-ein und prueft, ob die Tests ihn finden.
+"""Fehler-Einbau-Test für die beiden Kernmodule (uldg_model.py, uldg_geometry.py): baut einzeln einen Fehler
+ein und prüft, ob die Tests ihn finden.
 
 Aufruf (im Projektordner): _venvs/test/Scripts/python.exe tools/mutation_check.py [Teilstring des Dateinamens] [--jobs N]
 Jeder Mutant ersetzt genau eine Stelle; Ueberlebende sind entweder gleichwertig (kein sichtbarer Unterschied)
-oder eine Luecke der Tests. Jeder Mutant laeuft in einer eigenen temporaeren Kopie (deshalb parallel moeglich,
-Standard 4 Jobs); PYTHONDONTWRITEBYTECODE=1, damit veralteter Bytecode keine Ueberlebenden vortaeuscht;
+oder eine Lücke der Tests. Jeder Mutant läuft in einer eigenen temporären Kopie (deshalb parallel möglich,
+Standard 4 Jobs); PYTHONDONTWRITEBYTECODE=1, damit veralteter Bytecode keine Ueberlebenden vortäuscht;
 Quelltexte als LF (Windows-Python schreibt sonst CRLF und die Zeichenketten in tools/mutants.py finden nichts).
 
-Selbstpruefung (Baseline): VOR den Mutanten laeuft eine UNVERAENDERTE Kopie gegen die Tests. Besteht sie
-nicht, bricht das Werkzeug ab - sonst waere jeder "gefundene" Mutant vorgetaeuscht.
+Selbstprüfung (Baseline): VOR den Mutanten läuft eine UNVERAENDERTE Kopie gegen die Tests. Besteht sie
+nicht, bricht das Werkzeug ab - sonst wäre jeder "gefundene" Mutant vorgetäuscht.
 
 Die Mutanten sind handverlesen (siehe tools/mutants.py) - bei nur zwei kleinen, mechanisch aus
-messreihe_uld_gewicht/uld.py uebernommenen Kernmodulen deckt eine handverlesene Liste jede
+messreihe_uld_gewicht/uld.py übernommenen Kernmodulen deckt eine handverlesene Liste jede
 Vergleichsoperation, jede Vorzeichen-/Faktor-Stelle und jede Sortierordnung ab. Die relevanten Tests laufen
-auf eingefrorenen Instanzen (tests/data/uldg_frozen.json) oder auf handgerechneten Grenzfaellen: kein Mutant
-haengt vom Zufallsgenerator ab, ausser test_geometry.py::test_viele_zufallspackungen_ohne_fehler (fester
+auf eingefrorenen Instanzen (tests/data/uldg_frozen.json) oder auf handgerechneten Grenzfällen: kein Mutant
+hängt vom Zufallsgenerator ab, außer test_geometry.py::test_viele_zufallspackungen_ohne_fehler (fester
 Seed, robust gegen NumPy-Versionsdrift bei der Ziehung selbst, siehe DEMO-PLAYBOOK Abschnitt 4)."""
 import concurrent.futures as cf
 import os
@@ -62,7 +62,7 @@ def run_one(n, name, old, new, tmp_root):
             r = subprocess.run(args, cwd=work, env=env, capture_output=True, text=True, timeout=TIMEOUT)
             return n, name, old, new, "UEBERLEBT" if r.returncode == 0 else "gefunden"
         except subprocess.TimeoutExpired:
-            return n, name, old, new, "gefunden(Zeitueberschreitung)"
+            return n, name, old, new, "gefunden(Zeitüberschreitung)"
     finally:
         shutil.rmtree(work, ignore_errors=True)
 
@@ -79,10 +79,10 @@ def main():
     status = run_one(0, "uldg_model.py", "from __future__ import annotations",
                       "from __future__ import annotations", tmp_root)[4]
     if status != "UEBERLEBT":
-        print(f"ABBRUCH: unveraenderte Kopie besteht die Tests nicht ({status}) - Ergebnisse waeren wertlos")
+        print(f"ABBRUCH: unveränderte Kopie besteht die Tests nicht ({status}) - Ergebnisse wären wertlos")
         shutil.rmtree(tmp_root, ignore_errors=True)
         return 2
-    print("Selbstpruefung: unveraenderte Kopie besteht alle Tests (Werkzeug funktioniert)", flush=True)
+    print("Selbstprüfung: unveränderte Kopie besteht alle Tests (Werkzeug funktioniert)", flush=True)
     todo = [(n, *m) for n, m in enumerate(MUTANTS, 1) if not only or only in m[0]]
     survivors, errors, killed = [], [], 0
     with cf.ThreadPoolExecutor(max_workers=jobs) as pool:
@@ -98,7 +98,7 @@ def main():
             else:
                 killed += 1
                 print(f"[{n:3d}] {res_status}  {name}", flush=True)
-    print(f"\n{killed} gefunden, {len(survivors)} ueberlebt, {len(errors)} Fehler in der Mutantenliste (von {len(todo)})")
+    print(f"\n{killed} gefunden, {len(survivors)} überlebt, {len(errors)} Fehler in der Mutantenliste (von {len(todo)})")
     shutil.rmtree(tmp_root, ignore_errors=True)
     return 1 if (survivors or errors) else 0
 

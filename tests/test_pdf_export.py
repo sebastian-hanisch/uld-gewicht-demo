@@ -1,4 +1,4 @@
-"""Tests fuer uldg_pdf_export.py: das PDF muss ohne Fehler entstehen (keine der abstuerzenden Sonderzeichen
+"""Tests für uldg_pdf_export.py: das PDF muss ohne Fehler entstehen (keine der abstürzenden Sonderzeichen
 Gedankenstrich/Euro, siehe DEMO-PLAYBOOK Abschnitt 7) und ein plausibles PDF-Objekt sein."""
 import numpy as np
 

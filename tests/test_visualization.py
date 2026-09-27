@@ -1,4 +1,4 @@
-"""Rauchtests fuer uldg_visualization.py: Figuren bauen ohne Fehler, mit der erwarteten Spurenzahl, und alle
+"""Rauchtests für uldg_visualization.py: Figuren bauen ohne Fehler, mit der erwarteten Spurenzahl, und alle
 2D-Achsen sind fixedrange (Plotly-Fallstricke, DEMO-PLAYBOOK Abschnitt 3)."""
 import numpy as np
 import plotly.graph_objects as go

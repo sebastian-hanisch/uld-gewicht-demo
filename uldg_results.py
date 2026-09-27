@@ -2,9 +2,9 @@
 (data/uldg_results.json, 54 Zellen x 200 gepaarte Instanzen, aus messreihe_uld_gewicht/sweep.py).
 
 Die drei Regler (Kontur, Boxzahl, Dichtestreuung) bilden zusammen mit der Schwerpunkt-Toleranz genau die vier
-Sweep-Dimensionen ab (AP 0 bestaetigt: alle 54 Kombinationen liegen exakt auf einer gemessenen Zelle, siehe
+Sweep-Dimensionen ab (AP 0 bestätigt: alle 54 Kombinationen liegen exakt auf einer gemessenen Zelle, siehe
 tests/test_results.py::test_alle_reglerkombinationen_liegen_auf_einer_gemessenen_zelle) - `find_cell` ist
-deshalb ein exakter Treffer, keine Naeherung auf die naechstliegende Zelle wie bei anderen Fall-Demos."""
+deshalb ein exakter Treffer, keine Näherung auf die nächstliegende Zelle wie bei anderen Fall-Demos."""
 from __future__ import annotations
 
 import functools
@@ -20,14 +20,14 @@ TOL_OPTIONS = (0.05, 0.10, 0.20)
 CV_OPTIONS = (0.1, 0.3, 0.6)
 N_BOXES_OPTIONS = (10, 16, 24)
 
-# Urteilsschwellen (Kernabschnitt, drei Zustaende wie im Detailplan Abschnitt 6 vorgesehen). Mit 200 Instanzen
-# je Zelle liegt die Stichprobenstreuung einer Anteilsschaetzung (Standardfehler sqrt(p(1-p)/200)) bei
-# hoechstens rund 3,5 Prozentpunkten - alle drei Schwellen liegen klar darueber, kein Rauschartefakt.
+# Urteilsschwellen (Kernabschnitt, drei Zustände wie im Detailplan Abschnitt 6 vorgesehen). Mit 200 Instanzen
+# je Zelle liegt die Stichprobenstreuung einer Anteilsschätzung (Standardfehler sqrt(p(1-p)/200)) bei
+# höchstens rund 3,5 Prozentpunkten - alle drei Schwellen liegen klar darüber, kein Rauschartefakt.
 UNKRITISCH_VOL_MAX = 0.15   # H_vol verletzt ohnehin selten: die Toleranz ist in dieser Zelle kaum ein Thema
-DEUTLICH_MIN_GAIN = 0.15    # H_vol minus H_cg (Anteil, nicht Prozentpunkte): Mindest-Reduktion fuer "hilft deutlich"
-DEUTLICH_MAX_CG = 0.40      # UND die Regel muss die Restverletzung auf einen ueberschaubaren Wert senken - sonst
-                             # zaehlt eine grosse relative Reduktion allein nicht als "deutlich" (die enge-Toleranz-Zelle
-                             # senkt z. B. von 95,5 % auf 77,5 %, eine grosse Reduktion, bleibt aber untragbar hoch:
+DEUTLICH_MIN_GAIN = 0.15    # H_vol minus H_cg (Anteil, nicht Prozentpunkte): Mindest-Reduktion für "hilft deutlich"
+DEUTLICH_MAX_CG = 0.40      # UND die Regel muss die Restverletzung auf einen überschaubaren Wert senken - sonst
+                             # zählt eine große relative Reduktion allein nicht als "deutlich" (die enge-Toleranz-Zelle
+                             # senkt z. B. von 95,5 % auf 77,5 %, eine große Reduktion, bleibt aber untragbar hoch:
                              # das ist der Befund "reicht nicht", nicht "hilft deutlich" - siehe ERGEBNIS.md Befund 2)
 
 STATE_UNKRITISCH = "unkritisch"
@@ -65,9 +65,9 @@ def gain_pp(cell: dict) -> float:
 
 
 def judgment(cell: dict) -> str:
-    """Drei Zustaende (Kernabschnitt). Faellt der Gewinn negativ aus (H_cg schlechter als H_vol - kommt in
-    dieser Messreihe in mehreren Zellen vor, siehe ERGEBNIS.md-Nebenbefunde), zaehlt das ausdruecklich zu
-    „hilft, reicht aber nicht": die Regel ist dort keine verlaessliche Verbesserung."""
+    """Drei Zustände (Kernabschnitt). Fällt der Gewinn negativ aus (H_cg schlechter als H_vol - kommt in
+    dieser Messreihe in mehreren Zellen vor, siehe ERGEBNIS.md-Nebenbefunde), zählt das ausdrücklich zu
+    „hilft, reicht aber nicht": die Regel ist dort keine verlässliche Verbesserung."""
     if cell["violation_rate_vol"] < UNKRITISCH_VOL_MAX:
         return STATE_UNKRITISCH
     if gain_pp(cell) >= 100.0 * DEUTLICH_MIN_GAIN and cell["violation_rate_cg"] <= DEUTLICH_MAX_CG:
@@ -90,7 +90,7 @@ def judgment_text(cell: dict) -> str:
 
 
 def regime_rows(data: dict) -> list[dict]:
-    """Alle 54 Zellen mit Urteil, fuer die Regime-Tabelle."""
+    """Alle 54 Zellen mit Urteil, für die Regime-Tabelle."""
     out = []
     for c in cells(data):
         out.append({
@@ -103,12 +103,12 @@ def regime_rows(data: dict) -> list[dict]:
 
 
 def tol_rows(data: dict, contour: str, cv: float, n_boxes: int) -> list[dict]:
-    """Verletzungsrate ueber die Toleranz (fuer die Kerngrafik), feste Kontur/CV/Boxzahl."""
+    """Verletzungsrate über die Toleranz (für die Kerngrafik), feste Kontur/CV/Boxzahl."""
     return [find_cell(data, contour, tol, cv, n_boxes) for tol in TOL_OPTIONS]
 
 
 def util_price_summary(data: dict) -> dict:
-    """Auslastungsdifferenz H_cg minus H_vol ueber alle 54 Zellen (Beleg: Volumenpreis vernachlaessigbar)."""
+    """Auslastungsdifferenz H_cg minus H_vol über alle 54 Zellen (Beleg: Volumenpreis vernachlässigbar)."""
     diffs = [c["util_diff_mean"] for c in cells(data)]
     return {"min": min(diffs), "max": max(diffs), "mean": sum(diffs) / len(diffs)}
 

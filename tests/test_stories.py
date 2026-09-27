@@ -1,4 +1,4 @@
-"""Tests fuer uldg_stories.py: jedes Preset gegen die vorgerechnete Messreihe, einzeln pruefbar."""
+"""Tests für uldg_stories.py: jedes Preset gegen die vorgerechnete Messreihe, einzeln prüfbar."""
 import uldg_results as R
 import uldg_stories as S
 

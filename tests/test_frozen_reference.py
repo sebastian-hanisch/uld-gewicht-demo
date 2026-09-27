@@ -1,10 +1,10 @@
 """Eingefrorene Instanzen (tests/data/uldg_frozen.json): 4 feste Boxlisten (Zahlenwerte, keine Zufallsziehung
-zur Testzeit), mit denen beide Packregeln auf beiden Konturen reproduzierbare Kennzahlen liefern muessen.
+zur Testzeit), mit denen beide Packregeln auf beiden Konturen reproduzierbare Kennzahlen liefern müssen.
 
-Nach DEMO-PLAYBOOK Abschnitt 4 (NumPy-Version-Drift) haengt kein Test hier von `np.random.default_rng` ab:
+Nach DEMO-PLAYBOOK Abschnitt 4 (NumPy-Version-Drift) hängt kein Test hier von `np.random.default_rng` ab:
 die Boxen selbst sind als Zahlen im JSON eingefroren (einmalig mit Seeds 11/22/33/44 erzeugt und dann fest
-gespeichert), nur das Packverfahren (reine Python-Schleifen plus ein `np.median` ueber eine feste, kurze
-Liste) laeuft bei jedem Testlauf neu. Ganzzahlige Kennzahlen (platzierte/unplatzierte Boxen) muessen exakt
+gespeichert), nur das Packverfahren (reine Python-Schleifen plus ein `np.median` über eine feste, kurze
+Liste) läuft bei jedem Testlauf neu. Ganzzahlige Kennzahlen (platzierte/unplatzierte Boxen) müssen exakt
 stimmen, Gleitkommasummen mit `pytest.approx`."""
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ def test_frozen_instance_reproduces_measured_metrics(case, contour_key):
 
 
 def test_the_frozen_set_covers_boxzahl_and_cv_stufen():
-    """Die eingefrorenen Faelle decken alle drei Boxzahl-Stufen (10/16/24) und mehrere Dichtestreuungen ab."""
+    """Die eingefrorenen Fälle decken alle drei Boxzahl-Stufen (10/16/24) und mehrere Dichtestreuungen ab."""
     ns = {c["n"] for c in DATA}
     cvs = {c["cv"] for c in DATA}
     assert ns == {10, 16, 24}

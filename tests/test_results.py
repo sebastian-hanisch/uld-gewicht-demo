@@ -1,4 +1,4 @@
-"""Tests fuer uldg_results.py: exakte Zell-Zuordnung (AP 0), Urteilslogik in drei Zustaenden, Kennzahlen."""
+"""Tests für uldg_results.py: exakte Zell-Zuordnung (AP 0), Urteilslogik in drei Zuständen, Kennzahlen."""
 from __future__ import annotations
 
 from itertools import product
@@ -12,7 +12,7 @@ D = R.load_results()
 
 def test_alle_reglerkombinationen_liegen_auf_einer_gemessenen_zelle():
     """AP 0: die drei Regler (Kontur, Boxzahl, Dichtestreuung) bilden zusammen mit der Toleranz genau die
-    vier Sweep-Dimensionen ab - 2 x 3 x 3 x 3 = 54 Kombinationen, keine Naeherung noetig."""
+    vier Sweep-Dimensionen ab - 2 x 3 x 3 x 3 = 54 Kombinationen, keine Näherung nötig."""
     combos = list(product(R.CONTOURS, R.TOL_OPTIONS, R.CV_OPTIONS, R.N_BOXES_OPTIONS))
     assert len(combos) == 54
     for contour, tol, cv, n in combos:
@@ -47,8 +47,8 @@ def test_presets_liefern_das_im_plan_beschriebene_urteil(name, args, expected_st
 
 
 def test_alle_drei_urteilszustaende_kommen_in_der_messreihe_vor():
-    """Kein Zustand ist ein toter Zweig (Nullspalten-Signal): jeder der drei Zustaende muss unter den 54
-    Zellen mindestens einmal auftreten, sonst waere die App-Meldung nie in diesem Zustand zu sehen."""
+    """Kein Zustand ist ein toter Zweig (Nullspalten-Signal): jeder der drei Zustände muss unter den 54
+    Zellen mindestens einmal auftreten, sonst wäre die App-Meldung nie in diesem Zustand zu sehen."""
     states = {R.judgment(c) for c in R.cells(D)}
     assert states == {R.STATE_UNKRITISCH, R.STATE_DEUTLICH, R.STATE_NICHT_AUSREICHEND}
 
@@ -80,7 +80,7 @@ def test_tol_rows_liefert_alle_drei_toleranzstufen_derselben_zelle():
 
 
 def test_util_price_summary_liegt_im_gemessenen_bereich():
-    """ERGEBNIS.md Befund 3: Auslastungsdifferenz zwischen -0,016 und +0,001 ueber alle 54 Zellen."""
+    """ERGEBNIS.md Befund 3: Auslastungsdifferenz zwischen -0,016 und +0,001 über alle 54 Zellen."""
     s = R.util_price_summary(D)
     assert -0.02 < s["min"] < 0 <= s["max"] < 0.01
     assert -0.005 < s["mean"] < 0.0

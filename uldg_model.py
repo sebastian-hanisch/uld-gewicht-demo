@@ -1,7 +1,7 @@
 """ULD-Beladung: Volumen gegen Schwerpunkt - Kerndatentypen und Kennzahlen.
 
-Mechanisch aus `packen-planung/messreihe_uld_gewicht/uld.py` uebernommen (dort gegen 25 Checks verifiziert,
-siehe ERGEBNIS.md) - nur die Modulgrenze ist neu, die Logik ist unveraendert. Dieses Modul enthaelt die
+Mechanisch aus `packen-planung/messreihe_uld_gewicht/uld.py` übernommen (dort gegen 25 Checks verifiziert,
+siehe ERGEBNIS.md) - nur die Modulgrenze ist neu, die Logik ist unverändert. Dieses Modul enthält die
 Datentypen (Box, Placed), die Kontur-/Volumen-Geometrie ohne Packalgorithmus und die Schwerpunkt-Kennzahlen.
 Das Extreme-Point-Packverfahren selbst steht in `uldg_geometry.py`.
 """
@@ -30,7 +30,7 @@ class Placed:
 
 
 def corners_ok(x: float, y: float, w: float, d: float, W: float, D: float, contour: str, chamfer: float) -> bool:
-    """Prueft die vier Grundflaechen-Ecken einer Box gegen die Kontur."""
+    """Prüft die vier Grundflächen-Ecken einer Box gegen die Kontur."""
     pts = [(x, y), (x + w, y), (x, y + d), (x + w, y + d)]
     for px, py in pts:
         if px < -1e-9 or px > W + 1e-9 or py < -1e-9 or py > D + 1e-9:

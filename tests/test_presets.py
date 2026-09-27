@@ -1,4 +1,4 @@
-"""Tests fuer uldg_presets.py: Permalink-Parsing, Einrasten auf Stufen, Presets."""
+"""Tests für uldg_presets.py: Permalink-Parsing, Einrasten auf Stufen, Presets."""
 import uldg_constants as C
 import uldg_presets as P
 

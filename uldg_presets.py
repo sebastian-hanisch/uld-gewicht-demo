@@ -1,8 +1,8 @@
 """Reglerspezifikation, Permalink, Presets, Seed-Knopf - Standardmuster aus dem OR-Demo-Portfolio
 (siehe bw_presets.py / irp_presets.py). Vier Regler sind feste Stufen (Kontur, Boxzahl, Dichtestreuung,
 Toleranz - genau die vier Sweep-Dimensionen der Messreihe, AP 0), einer ist ein Zahlenbereich (Seed): beim
-Permalink wird jeder Wert auf den Bereich begrenzt bzw. auf die naechste Stufe eingerastet, damit die
-Adresszeile nie einen Wert ausserhalb des Rasters in den Regler schreibt."""
+Permalink wird jeder Wert auf den Bereich begrenzt bzw. auf die nächste Stufe eingerastet, damit die
+Adresszeile nie einen Wert außerhalb des Rasters in den Regler schreibt."""
 import math
 import random
 from dataclasses import dataclass
@@ -49,8 +49,8 @@ def bounds(state_key):
 
 
 def parse_setting(spec, raw):
-    """Wert aus der Adresszeile: umwandeln, auf den Bereich begrenzen bzw. auf die naechste Stufe einrasten.
-    None, wenn er sich nicht auswerten laesst."""
+    """Wert aus der Adresszeile: umwandeln, auf den Bereich begrenzen bzw. auf die nächste Stufe einrasten.
+    None, wenn er sich nicht auswerten lässt."""
     if spec.caster is str:
         return raw if raw in spec.options else None
     try:

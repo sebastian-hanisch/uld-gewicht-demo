@@ -1,4 +1,4 @@
-"""Gemeinsame Fixtures fuer die uld-gewicht-demo Testsuite."""
+"""Gemeinsame Fixtures für die uld-gewicht-demo Testsuite."""
 import pathlib
 import sys
 

@@ -1,6 +1,6 @@
-"""AppTest: Skelett und Footer, jedes Preset, Permalink, alle Regler an Min und Max, alle drei Urteilszustaende,
+"""AppTest: Skelett und Footer, jedes Preset, Permalink, alle Regler an Min und Max, alle drei Urteilszustände,
 keine wirkungslosen Regler, PDF, Texte. Deckt DEMO-PLAYBOOK Abschnitt 5 (Browser-Verifikation reicht AppTest
-allein nicht, ergaenzt in AP 7 mit einem echten Browser-Durchlauf)."""
+allein nicht, ergänzt in AP 7 mit einem echten Browser-Durchlauf)."""
 import pathlib
 import re
 
@@ -57,7 +57,7 @@ def test_skeleton_and_footer():
     at = fresh()
     assert [h.value for h in at.sidebar.header] == ["⚙️ Einstellungen"]
     assert len(at.title) == 1 and at.title[0].value == "📦 ULD-Beladung: Volumen gegen Schwerpunkt"
-    assert any(v.value.startswith("## 📦 Haelt eine Volumen-Packung den Schwerpunkt ein?") for v in at.markdown)
+    assert any(v.value.startswith("## 📦 Hält eine Volumen-Packung den Schwerpunkt ein?") for v in at.markdown)
     assert any(v.value.startswith("### 📐 Was die Messreihe über 200 Instanzen zeigt") for v in at.markdown)
     assert [e.label for e in at.expander] == ["🔧 Wie wir das erreichen – vollständiger Methodenvergleich",
                                                 "Wie funktioniert diese Demo?", "📐 Mathematische Formulierung"]
@@ -117,7 +117,7 @@ def test_permalink_sets_the_controls_and_snaps_to_stages():
     assert state_values(at) == dict(contour_select="gerundet", boxes_slider=24, cv_slider=0.6, tol_slider=0.05, seed_input=17)
     at = fresh(contour="achteck", n="15", cv="0.4", tol="0.5", seed="-4")
     vals = state_values(at)
-    assert vals["contour_select"] == C.CONTOUR_DEFAULT  # ungueltiger Text: Standard
+    assert vals["contour_select"] == C.CONTOUR_DEFAULT  # ungültiger Text: Standard
     assert vals["boxes_slider"] in C.BOXES_OPTIONS and vals["cv_slider"] in C.CV_OPTIONS and vals["tol_slider"] in C.TOL_OPTIONS
     assert vals["seed_input"] == C.SEED_RANGE[0]  # -4 wird auf die Untergrenze begrenzt
 
@@ -150,7 +150,7 @@ def test_new_instance_button_rolls_a_new_seed(monkeypatch):
 
 
 # ---------------------------------------------------------------------------------------------------
-# Urteilszustaende, Kennzahlen, Texte
+# Urteilszustände, Kennzahlen, Texte
 # ---------------------------------------------------------------------------------------------------
 def test_all_three_judgment_states_are_reachable_through_the_controls():
     at = fresh(contour="rechteck", n="16", cv="0.3", tol="0.10")  # Standard: "deutlich"
@@ -190,11 +190,11 @@ def test_no_dead_file_links_in_markdown():
 def test_real_umlauts_present():
     at = fresh()
     text = " ".join(m.value for m in at.markdown) + " ".join(c.value for c in at.caption)
-    assert "schwerpunkt" in text.lower() and "Größenordnung" in text or "Groessenordnung" in text
+    assert "schwerpunkt" in text.lower() and "Größenordnung" in text or "Größenordnung" in text
 
 
 def test_regime_dataframe_is_not_a_dead_column():
-    """Nullspalten-Signal: keine Spalte der Regime-Tabelle ist ueberall gleich."""
+    """Nullspalten-Signal: keine Spalte der Regime-Tabelle ist überall gleich."""
     at = fresh()
     regime_frame = next(d.value for d in at.dataframe if "Urteil" in d.value.columns)
     assert len(regime_frame) == 54

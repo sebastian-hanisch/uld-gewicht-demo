@@ -1,14 +1,14 @@
 """Reproduktion der Vorab-Messreihe (Detailplan AP 0/7): derselbe Sweep wie
 packen-planung/messreihe_uld_gewicht/sweep.py, hier gegen die aufgeteilten Module uldg_model/uldg_geometry.
 Schreibt data/uldg_results.json (nicht Teil der CI - Laufzeit rund 20-25 s, siehe Detailplan Abschnitt 10).
-Vorlage fuer tools/check_full.py: dort wird dieselbe Rechnung gegen die eingecheckte Datei geprueft (AP 7,
+Vorlage für tools/check_full.py: dort wird dieselbe Rechnung gegen die eingecheckte Datei geprüft (AP 7,
 Bau-Gate).
 
-Die Zellen-Seeds kommen bewusst mechanisch unveraendert aus `hash((contour, tol, cv, n))` (wie im Original
+Die Zellen-Seeds kommen bewusst mechanisch unverändert aus `hash((contour, tol, cv, n))` (wie im Original
 messreihe_uld_gewicht/sweep.py) - das macht den Sweep NICHT bit-reproduzierbar zwischen verschiedenen
-Prozessen, weil Pythons String-`hash()` pro Prozess zufaellig gesalzen ist (PYTHONHASHSEED, PEP 456), es sei
-denn, man fixiert ihn ausdruecklich. Siehe tools/check_full.py fuer die Einordnung und den Ersatz-Nachweis
-(Selbst-Reproduzierbarkeit + statistische Naehe statt Bitgleichheit)."""
+Prozessen, weil Pythons String-`hash()` pro Prozess zufällig gesalzen ist (PYTHONHASHSEED, PEP 456), es sei
+denn, man fixiert ihn ausdrücklich. Siehe tools/check_full.py für die Einordnung und den Ersatz-Nachweis
+(Selbst-Reproduzierbarkeit + statistische Nähe statt Bitgleichheit)."""
 from __future__ import annotations
 
 import json
@@ -80,7 +80,7 @@ def main():
     out_path = ROOT / "data" / "uldg_results.json"
     out_path.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"{len(out['rows'])} Zellen, {len(out['rows']) * N_INSTANCES * 2} Packungen, {time.time() - t0:.1f}s")
-    print(f"Kontur-Verlust (Rechteck->gerundet, gleiche Aussenhuelle): {out['kontur_verlust_pct']:.1f}%")
+    print(f"Kontur-Verlust (Rechteck->gerundet, gleiche Außenhülle): {out['kontur_verlust_pct']:.1f}%")
 
 
 if __name__ == "__main__":

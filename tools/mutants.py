@@ -1,31 +1,31 @@
-"""Handverlesene Mutantenliste fuer die beiden Kernmodule (uldg_model.py, uldg_geometry.py): jede alte Stelle
-kommt im jeweiligen Modul genau einmal vor. Anders als bei den grossen Fall-Demos (dort maschinell erzeugt,
-siehe tools/gen_mutants.py der Vorbild-Repos) sind es hier nur zwei kleine, mechanisch aus uld.py uebernommene
+"""Handverlesene Mutantenliste für die beiden Kernmodule (uldg_model.py, uldg_geometry.py): jede alte Stelle
+kommt im jeweiligen Modul genau einmal vor. Anders als bei den großen Fall-Demos (dort maschinell erzeugt,
+siehe tools/gen_mutants.py der Vorbild-Repos) sind es hier nur zwei kleine, mechanisch aus uld.py übernommene
 Module - eine handverlesene Liste deckt jede Vergleichsoperation, jede Vorzeichen-/Faktor-Stelle und jede
 Sortierordnung ab, ohne die Maschinerie eines Generators zu brauchen.
 
-EQUIVALENT_NOTES wird nach dem ersten vollen Lauf mit der tatsaechlichen Einordnung der Ueberlebenden gefuellt
+EQUIVALENT_NOTES wird nach dem ersten vollen Lauf mit der tatsächlichen Einordnung der Ueberlebenden gefüllt
 (siehe tools/mutation_check.py und den Bericht im Abschluss-Kommentar)."""
-EQUIVALENT_NOTES = """Stand nach zwei Laeufen (37 handverlesene Mutanten): Lauf 1 fand 21, 16 ueberlebten;
-nach dem Schliessen von 10 echten Testluecken (tests/test_model_units.py: drei weitere Chamfer-Eckfaelle,
+EQUIVALENT_NOTES = """Stand nach zwei Läufen (37 handverlesene Mutanten): Lauf 1 fand 21, 16 überlebten;
+nach dem Schließen von 10 echten Testlücken (tests/test_model_units.py: drei weitere Chamfer-Eckfälle,
 die exakte Epsilon-Schwelle von cg_violation in x/y, der Divisions-Schutz von volume_utilization bei
 Volumen 0; tests/test_geometry.py: der Gitterpunkt y=140 in _floor_grid, der Distanz-Gleichstand-Tiebreak in
-try_place, die Gewichtsformel und der Dichte-Bodenwert in make_boxes) fand Lauf 2 31 von 37, 6 ueberlebten.
+try_place, die Gewichtsformel und der Dichte-Bodenwert in make_boxes) fand Lauf 2 31 von 37, 6 überlebten.
 Alle sechs sind gleichwertig (kein durch echte Geometrie erreichbarer Verhaltensunterschied), derselben
-Klasse wie die 'Vergleich am Massnullpunkt'-Faelle anderer Demos (siehe irp/bw tools/mutants.py):
+Klasse wie die 'Vergleich am Massnullpunkt'-Fälle anderer Demos (siehe irp/bw tools/mutants.py):
 
 (1) Aeussere Rand-Ecke von corners_ok, x und y (`px < -1e-9` bzw. `py < -1e-9` gegen `<=`): der Unterschied
     zeigt sich nur, wenn eine Boxecke exakt bei -1e-9 liegt - Box-Koordinaten entstehen in diesem Modell
-    ausschliesslich aus Container-Kanten (>= 0) und Boxkanten-Summen, nie aus einer Subtraktion, die exakt
-    -1e-9 ergeben koennte.
+    ausschließlich aus Container-Kanten (>= 0) und Boxkanten-Summen, nie aus einer Subtraktion, die exakt
+    -1e-9 ergeben könnte.
 (2) `_overlaps`: die drei Achsenvergleiche `<=` gegen `<` (x, y, z) mit derselben 1e-9-Toleranz: der
     Unterschied zeigt sich nur bei einem Achsenabstand von EXAKT 1e-9 zwischen zwei Boxkanten - bei
-    Kante-an-Kante-Platzierung (der einzige in diesem Modell erzeugte Beruehrungsfall) ist der Abstand
-    exakt 0, nicht 1e-9; ein Testfall mit exaktem 1e-9-Abstand waere reine Rundungs-Simulation, kein
+    Kante-an-Kante-Platzierung (der einzige in diesem Modell erzeugte Berührungsfall) ist der Abstand
+    exakt 0, nicht 1e-9; ein Testfall mit exaktem 1e-9-Abstand wäre reine Rundungs-Simulation, kein
     Modellverhalten.
 (3) `_floor_grid`: die x-Randstufe `range(int(W // step) + 1)` gegen `range(int(W // step))`: W = 160 ist
-    ein exaktes Vielfaches von step = 20, der zusaetzliche Punkt liegt exakt bei x = W = 160 - eine Box mit
-    positiver Breite kann dort nie beginnen (`x + box.w > W + 1e-9` schlaegt immer fehl). Die spiegelbildliche
+    ein exaktes Vielfaches von step = 20, der zusätzliche Punkt liegt exakt bei x = W = 160 - eine Box mit
+    positiver Breite kann dort nie beginnen (`x + box.w > W + 1e-9` schlägt immer fehl). Die spiegelbildliche
     y-Stufe (D = 150 ist KEIN Vielfaches von 20, der Punkt liegt bei y = 140, einem echten Innenpunkt) ist
     dagegen KEIN gleichwertiger Mutant und wird von test_floor_grid_enthaelt_den_letzten_erreichbaren_schritt_in_y
     gefangen - die Asymmetrie zwischen x und y ist beabsichtigt, kein Uebersehen."""

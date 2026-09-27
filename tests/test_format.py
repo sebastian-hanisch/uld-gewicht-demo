@@ -1,4 +1,4 @@
-"""Tests fuer uldg_format.py (deutsches Dezimalkomma)."""
+"""Tests für uldg_format.py (deutsches Dezimalkomma)."""
 from uldg_format import fmt_num, fmt_pct, fmt_pp
 
 

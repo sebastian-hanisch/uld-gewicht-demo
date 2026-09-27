@@ -1,9 +1,9 @@
 """ULD-Beladung: Volumen gegen Schwerpunkt - Plotly-Figuren.
 
-3D-Packansicht (go.Mesh3d, Quader-Dreiecksmuster mechanisch aus pack_demo/pack_visualization.py uebernommen -
+3D-Packansicht (go.Mesh3d, Quader-Dreiecksmuster mechanisch aus pack_demo/pack_visualization.py übernommen -
 dort bereits geometrisch verifiziert, siehe die Herleitung im dortigen Kommentar: alle 12 Dreiecke haben nach
-aussen zeigende Normalen) plus die vorgerechneten Grafiken (Verletzungsrate ueber Toleranz, Kontur-Volumen).
-Alle Achsen der 2D-Grafiken sind `fixedrange` (Touch-Scrollen soll nicht am Chart haengen bleiben); die
+außen zeigende Normalen) plus die vorgerechneten Grafiken (Verletzungsrate über Toleranz, Kontur-Volumen).
+Alle Achsen der 2D-Grafiken sind `fixedrange` (Touch-Scrollen soll nicht am Chart hängen bleiben); die
 3D-Ansicht dreht bewusst frei (das ist der Sinn der Ansicht).
 """
 from __future__ import annotations
@@ -16,8 +16,8 @@ COLOR_VOL = "#2a6fb0"
 COLOR_CG = "#9fc2e6"
 BOX_COLORS = ["#e07a5f", "#3d5a80", "#81b29a", "#f2cc8f", "#98c1d9", "#ee6c4d", "#c9ada7", "#6d6875"]
 
-# Quader-Eckpunkt-Reihenfolge und Dreiecke fuer go.Mesh3d (siehe pack_demo/pack_visualization.py fuer die
-# Herleitung: alle 12 Dreiecke zeigen nach aussen).
+# Quader-Eckpunkt-Reihenfolge und Dreiecke für go.Mesh3d (siehe pack_demo/pack_visualization.py für die
+# Herleitung: alle 12 Dreiecke zeigen nach außen).
 _BOX_TRIANGLES_I = [0, 0, 4, 4, 0, 0, 3, 3, 0, 0, 1, 1]
 _BOX_TRIANGLES_J = [2, 3, 5, 6, 1, 5, 6, 7, 7, 4, 2, 6]
 _BOX_TRIANGLES_K = [1, 2, 6, 7, 5, 4, 2, 6, 3, 7, 6, 5]
@@ -80,7 +80,7 @@ def packing_figure(placed, W: float, D: float, H: float, contour: str, chamfer: 
         scene=dict(
             xaxis=dict(title="Breite (cm)", range=[0, W]),
             yaxis=dict(title="Tiefe (cm)", range=[0, D]),
-            zaxis=dict(title="Hoehe (cm)", range=[0, H]),
+            zaxis=dict(title="Höhe (cm)", range=[0, H]),
             aspectmode="data", camera=dict(eye=dict(x=1.5, y=-1.5, z=1.0)),
         ),
         height=460, margin=dict(l=0, r=0, t=20, b=0), showlegend=False,
@@ -89,7 +89,7 @@ def packing_figure(placed, W: float, D: float, H: float, contour: str, chamfer: 
 
 
 def violation_rate_figure(rows: list[dict]):
-    """Verletzungsrate H_vol gegen H_cg ueber die drei Toleranzstufen (feste Kontur/CV/Boxzahl, 3 Balkenpaare)."""
+    """Verletzungsrate H_vol gegen H_cg über die drei Toleranzstufen (feste Kontur/CV/Boxzahl, 3 Balkenpaare)."""
     tols = [f"{r['tol'] * 100:.0f} %" for r in rows]
     fig = go.Figure()
     fig.add_trace(go.Bar(x=tols, y=[r["violation_rate_vol"] * 100 for r in rows], name="H_vol (Volumen)",
@@ -121,7 +121,7 @@ def kontur_volume_figure(vol_rechteck: float, vol_gerundet: float):
 
 
 def regime_figure(rows: list[dict], current_key: tuple | None = None):
-    """Gewinn (H_vol minus H_cg, Prozentpunkte) ueber alle 54 Zellen, gefaerbt nach Urteil."""
+    """Gewinn (H_vol minus H_cg, Prozentpunkte) über alle 54 Zellen, gefärbt nach Urteil."""
     color_map = {"deutlich": "#3d8b5f", "nicht_ausreichend": "#c9a227", "unkritisch": "#7a7a7a"}
     xs = [f"{r['contour'][:4]}/{r['tol']:.2f}/{r['cv']:.1f}/{r['n_boxes']}" for r in rows]
     ys = [r["gain_pp"] for r in rows]

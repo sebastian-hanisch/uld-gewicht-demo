@@ -1,7 +1,7 @@
 """ULD-Beladung: Volumen gegen Schwerpunkt - Extreme-Point-Packverfahren.
 
-Mechanisch aus `packen-planung/messreihe_uld_gewicht/uld.py` uebernommen (dort gegen 25 Checks verifiziert,
-siehe ERGEBNIS.md) - nur die Modulgrenze ist neu, die Logik ist unveraendert. Enthaelt die
+Mechanisch aus `packen-planung/messreihe_uld_gewicht/uld.py` übernommen (dort gegen 25 Checks verifiziert,
+siehe ERGEBNIS.md) - nur die Modulgrenze ist neu, die Logik ist unverändert. Enthält die
 Extreme-Point-Heuristik (Crainic, Perboli, Tadei 2008) mit den beiden Packregeln H_vol (Baseline, ignoriert
 Gewicht) und H_cg (schwerpunkt-bewusst) sowie die Zufallserzeugung der Boxen.
 """
@@ -28,7 +28,7 @@ def _overlaps(a: Placed, b: Placed) -> bool:
 
 def _seed_points(W: float, D: float, contour: str, chamfer: float) -> set[tuple[float, float, float]]:
     """Anfangs-Kandidaten am Boden: der Ursprung bei Rechteck-Kontur liegt bei einer gerundeten Kontur
-    selbst ausserhalb der Kontur (die Ecke ist ja gerade abgeschnitten) - der Extreme-Point-Algorithmus
+    selbst außerhalb der Kontur (die Ecke ist ja gerade abgeschnitten) - der Extreme-Point-Algorithmus
     braucht dort die Eckpunkte der Kontur als Startpunkte, sonst wird nie etwas platziert (0/200 Instanzen
     beim ersten Lauf dieser Messreihe - Nullspalten-Signal, siehe check.py)."""
     if contour == RECHTECK:
@@ -43,8 +43,8 @@ def _seed_points(W: float, D: float, contour: str, chamfer: float) -> set[tuple[
 
 
 def _floor_grid(W: float, D: float, step: float = 20.0) -> set[tuple[float, float, float]]:
-    """Zusaetzliche Kandidatenpunkte am Boden (nicht nur an Boxkanten), damit eine Regel, die auf die Mitte
-    zielt, dort auch tatsaechlich ansetzen kann - ohne sie waeren nur Randpunkte erreichbar."""
+    """Zusätzliche Kandidatenpunkte am Boden (nicht nur an Boxkanten), damit eine Regel, die auf die Mitte
+    zielt, dort auch tatsächlich ansetzen kann - ohne sie wären nur Randpunkte erreichbar."""
     xs = [i * step for i in range(int(W // step) + 1)]
     ys = [j * step for j in range(int(D // step) + 1)]
     return {(x, y, 0.0) for x in xs for y in ys}
@@ -66,8 +66,8 @@ def _candidate_points(placed: list[Placed], W: float, D: float, contour: str, ch
 
 def try_place(box: Box, placed: list[Placed], W: float, D: float, H: float, contour: str, chamfer: float,
               target: tuple[float, float] | None = None, with_floor_grid: bool = False) -> Placed | None:
-    """Erste zulaessige Position (Extreme-Point); mit `target` die zulaessige Position, deren Boxmitte den
-    kleinsten Abstand zu `target` hat (fuer die schwerpunkt-bewusste Regel, mit erweitertem Kandidatenraster)."""
+    """Erste zulässige Position (Extreme-Point); mit `target` die zulässige Position, deren Boxmitte den
+    kleinsten Abstand zu `target` hat (für die schwerpunkt-bewusste Regel, mit erweitertem Kandidatenraster)."""
     best = None
     best_dist = None
     for (x, y, z) in _candidate_points(placed, W, D, contour, chamfer, with_floor_grid):
@@ -102,8 +102,8 @@ def pack_greedy_volume(boxes: list[Box], W: float, D: float, H: float, contour: 
 
 
 def pack_cg_aware(boxes: list[Box], W: float, D: float, H: float, contour: str, chamfer: float):
-    """H_cg: schwere Boxen zuerst und mit Vorzug fuer Positionen nahe der geometrischen Mitte (erweiterter
-    Bodenraster, damit dieser Vorzug ueberhaupt Kandidaten in der Mitte zur Auswahl hat), sonst dasselbe
+    """H_cg: schwere Boxen zuerst und mit Vorzug für Positionen nahe der geometrischen Mitte (erweiterter
+    Bodenraster, damit dieser Vorzug überhaupt Kandidaten in der Mitte zur Auswahl hat), sonst dasselbe
     Verfahren wie H_vol."""
     if not boxes:
         return [], []
@@ -136,6 +136,6 @@ def make_boxes(rng: np.random.Generator, n: int, density_cv: float,
         h = rng.uniform(*h_range)
         vol = w * d * h
         density = max(0.05, rng.normal(1.0, density_cv))
-        weight = vol * density / 1000.0  # kg, willkuerliche Skala (dm^3 * kg/dm^3 / 1000 -> handliche Groessenordnung)
+        weight = vol * density / 1000.0  # kg, willkürliche Skala (dm^3 * kg/dm^3 / 1000 -> handliche Größenordnung)
         boxes.append(Box(w, d, h, weight))
     return boxes

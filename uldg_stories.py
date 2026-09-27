@@ -1,5 +1,5 @@
-"""Abnahmekriterien der fuenf Presets (Detailplan Abschnitt 7) - jedes einzeln gegen die vorgerechnete
-Messreihe (data/uldg_results.json) pruefbar, damit ein Preset nie eine Geschichte erzaehlt, die die Zahlen
+"""Abnahmekriterien der fünf Presets (Detailplan Abschnitt 7) - jedes einzeln gegen die vorgerechnete
+Messreihe (data/uldg_results.json) prüfbar, damit ein Preset nie eine Geschichte erzählt, die die Zahlen
 nicht tragen."""
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ def check_standard(data: dict) -> tuple[bool, str]:
     cell = _cell_for("Standard", data)
     vol, cg = cell["violation_rate_vol"], cell["violation_rate_cg"]
     ok = vol >= 0.60 and cg <= vol / 2.0 + 0.05
-    return ok, f"H_vol {fmt_pct(vol)} (>= 60 % erwartet), H_cg {fmt_pct(cg)} (<= etwa die Haelfte von H_vol erwartet)"
+    return ok, f"H_vol {fmt_pct(vol)} (>= 60 % erwartet), H_cg {fmt_pct(cg)} (<= etwa die Hälfte von H_vol erwartet)"
 
 
 def check_enge_toleranz(data: dict) -> tuple[bool, str]:
@@ -45,7 +45,7 @@ def check_gerundetes_uld(data: dict) -> tuple[bool, str]:
 def check_viele_gemischte_boxen(data: dict) -> tuple[bool, str]:
     cell = _cell_for("Viele, gemischte Boxen", data)
     ok = cell["unplaced_cg_mean"] > cell["unplaced_vol_mean"]
-    return ok, f"unplatzierte Boxen H_cg {cell['unplaced_cg_mean']:.2f} gegen H_vol {cell['unplaced_vol_mean']:.2f} (H_cg groesser erwartet)"
+    return ok, f"unplatzierte Boxen H_cg {cell['unplaced_cg_mean']:.2f} gegen H_vol {cell['unplaced_vol_mean']:.2f} (H_cg größer erwartet)"
 
 
 CHECKS = {
