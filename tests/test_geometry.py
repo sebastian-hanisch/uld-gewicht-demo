@@ -26,14 +26,34 @@ def test_ueberlappung_kante_an_kante_ueberlappt_nicht():
     assert not _overlaps(pa, pc)
 
 
+def _support_fraction(cand, others):
+    """Ordnungsunabhängige Nachprüfung der Auflage gegen ALLE anderen platzierten Boxen einer fertigen
+    Packung (nicht nur die zur Platzierungszeit vorhandenen) - Vorlage messreihe_uld_gewicht/check.py."""
+    if cand.z <= 1e-9:
+        return 1.0
+    area = cand.box.w * cand.box.d
+    if area <= 0:
+        return 1.0
+    covered = 0.0
+    x1, y1 = cand.x + cand.box.w, cand.y + cand.box.d
+    for p in others:
+        if abs((p.z + p.box.h) - cand.z) > 1e-6:
+            continue
+        ox = max(0.0, min(x1, p.x + p.box.w) - max(cand.x, p.x))
+        oy = max(0.0, min(y1, p.y + p.box.d) - max(cand.y, p.y))
+        covered += ox * oy
+    return min(covered / area, 1.0)
+
+
 def test_viele_zufallspackungen_ohne_fehler():
-    """Check 8: Gewichtserhaltung und keine Ueberlappung über viele Zufallsinstanzen, beide Heuristiken,
-    beide Konturen (300 Instanzen x 2 Konturen x 2 Regeln = 1200 Packungen, wie im Original)."""
+    """Check 8: Gewichtserhaltung, keine Ueberlappung und volle Auflage über viele Zufallsinstanzen, beide
+    Heuristiken, beide Konturen (300 Instanzen x 2 Konturen x 2 Regeln = 1200 Packungen, wie im Original)."""
     rng = np.random.default_rng(1)
     n_checked = 0
     overlap_found = False
     weight_mismatch = False
     contour_violation = False
+    unsupported_found = False
     for _trial in range(300):
         boxes = make_boxes(rng, int(rng.integers(4, 16)), float(rng.uniform(0.05, 0.6)))
         total_w = sum(b.weight for b in boxes)
@@ -49,10 +69,49 @@ def test_viele_zufallspackungen_ohne_fehler():
                             overlap_found = True
                     if not corners_ok(placed[i].x, placed[i].y, placed[i].box.w, placed[i].box.d, W, D, contour, CHAMFER):
                         contour_violation = True
+                    if _support_fraction(placed[i], placed[:i] + placed[i + 1:]) < 1.0 - 1e-6:
+                        unsupported_found = True
     assert n_checked == 1200
     assert not overlap_found
     assert not weight_mismatch
     assert not contour_violation
+    assert not unsupported_found
+
+
+def test_regression_keine_schwebenden_kippenden_boxen():
+    """PFLICHT-Regressionstest für den vom Nutzer live in der App gefundenen Bug: auf der Instanzfamilie, die
+    vor der Behebung 2,3 % vollständig schwebende Boxen erzeugte, ist jetzt jede Box vollständig aufgelegt."""
+    rng = np.random.default_rng(0)
+    n_floating = 0
+    n_boxes = 0
+    for _ in range(100):
+        boxes = make_boxes(rng, int(rng.integers(8, 24)), float(rng.uniform(0.1, 0.6)))
+        placed, _unplaced = pack_greedy_volume(boxes, W, D, H, RECHTECK, CHAMFER)
+        for i, cand in enumerate(placed):
+            n_boxes += 1
+            if _support_fraction(cand, placed[:i] + placed[i + 1:]) < 1.0 - 1e-6:
+                n_floating += 1
+    assert n_boxes > 1000
+    assert n_floating == 0
+
+
+def test_zwei_boxen_nebeneinander_tragen_eine_box_darueber_voll():
+    from uldg_geometry import _fully_supported
+    low_a = Placed(Box(50, 50, 20, 1), 0, 0, 0)
+    low_b = Placed(Box(50, 50, 20, 1), 50, 0, 0)
+    assert _fully_supported(0, 0, 100, 50, 20, [low_a, low_b])
+
+
+def test_box_ueber_nur_einer_von_zwei_tragenden_boxen_ist_nicht_voll_getragen():
+    """Hätte vor der Behebung als zulässige Position durchgehen können - das ist genau der Bug."""
+    from uldg_geometry import _fully_supported
+    low_a = Placed(Box(50, 50, 20, 1), 0, 0, 0)
+    assert not _fully_supported(0, 0, 100, 50, 20, [low_a])
+
+
+def test_box_auf_dem_boden_ist_immer_getragen():
+    from uldg_geometry import _fully_supported
+    assert _fully_supported(10, 10, 30, 30, 0.0, [])
 
 
 def test_keine_boxen_leere_packung():

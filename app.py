@@ -174,7 +174,8 @@ with c2:
     util_price = R.util_price_summary(DATA)
     st.markdown(f"**Volumenpreis der Schwerpunktregel:** Auslastungsdifferenz H_cg gegen H_vol über alle 54 "
                 f"Zellen zwischen {fmt_num(util_price['min'] * 100, 1, True)} und {fmt_num(util_price['max'] * 100, 1, True)} "
-                "Prozentpunkten - vernachlässigbar. Der Preis zeigt sich stattdessen in mehr unplatzierten "
+                "Prozentpunkten - klein, aber seit der Behebung des Auflage-Bugs (siehe unten) messbar, nicht "
+                "mehr ganz vernachlässigbar. Der Preis zeigt sich stattdessen vor allem in mehr unplatzierten "
                 "Boxen bei hoher Dichtestreuung und vielen Boxen.")
 
 st.markdown("**3 · Regime** – wo hilft die Schwerpunktregel deutlich, wo reicht sie nicht, wo ist die Toleranz ohnehin unkritisch? (alle 54 gemessenen Zellen)")
@@ -188,9 +189,13 @@ _state_text = (
     f"„{R.STATE_LABEL[R.STATE_NICHT_AUSREICHEND]}“ ({_counts.get(R.STATE_NICHT_AUSREICHEND, 0)}), "
     f"„{R.STATE_LABEL[R.STATE_UNKRITISCH]}“ ({_counts.get(R.STATE_UNKRITISCH, 0)})"
 )
-st.caption(f"Urteil in drei Zuständen (wie die Meldung oben): {_state_text}. Die schwerpunkt-bewusste Regel "
-           "ist NICHT in jeder Zelle besser als die reine Volumen-Regel - in mehreren Zellen ist der Gewinn "
-           "negativ (die Regel schadet leicht); das ist ein gemessener Befund, keine Ausnahme, die verschwiegen wird.")
+_min_gain = min(R.gain_pp(c) for c in R.cells(DATA))
+st.caption(f"Urteil in drei Zuständen (wie die Meldung oben): {_state_text}. In dieser (neu gerechneten) "
+           f"Messreihe ist der Gewinn der schwerpunkt-bewussten Regel in allen 54 Zellen positiv (kleinster "
+           f"gemessener Wert {fmt_num(_min_gain, 1, True)} Prozentpunkte) - vor der Behebung des Auflage-Bugs "
+           "gab es Zellen mit negativem Gewinn, das war selbst ein dokumentierter Bug (siehe Abschnitt "
+           "\"Befunde beim Bauen\" im README). Kein Beweis, dass das für jede denkbare Instanz gilt - nur der "
+           "gemessene Befund dieser Stichprobe.")
 
 with pdf_slot:
     st.download_button(
@@ -267,6 +272,12 @@ Boxen fehlt dort Platz.
 Rasterwahl: das Bodenraster ist bei der gerundeten Kontur stärker zur Mitte hin konzentriert (die Randfelder
 in den abgeschnittenen Ecken fehlen), was indirekt zentrumsnahe Platzierung begünstigt - keine physikalische
 Aussage über gerundete ULDs.
+
+**Auflage-Fix (nach dem Deploy vom Nutzer gemeldet).** Boxen schwebten sichtbar in der Luft oder konnten kippen,
+weil das Platzierungsverfahren nur Überlappung und Kontur prüfte, nie ob die gesamte Grundfläche einer Box
+tatsächlich aufliegt. Vor der Behebung hatten 2,3 % der platzierten Boxen 0 % Auflage, 4,3 % unter 50 %.
+Behoben durch eine vollständige Auflage-Prüfung in `uldg_geometry.try_place()`; die komplette Messreihe wurde
+neu gerechnet - alle Zahlen in dieser Demo sind bereits die korrigierte Fassung.
 
 **Grenzen dieses Modells** (bewusst so gewählt, damit die Aussage ehrlich bleibt):
 

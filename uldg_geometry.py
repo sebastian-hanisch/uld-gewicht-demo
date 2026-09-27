@@ -26,6 +26,31 @@ def _overlaps(a: Placed, b: Placed) -> bool:
     )
 
 
+def _fully_supported(x: float, y: float, w: float, d: float, z: float, placed: list[Placed]) -> bool:
+    """Prüft, ob die GESAMTE Grundfläche einer Box bei Höhe z entweder auf dem Boden (z = 0) steht oder
+    lücken- und überhanglos von den Oberkanten bereits platzierter Boxen getragen wird - sonst schwebt die
+    Box oder kippt (vom Nutzer live in der App bemerkt: 2,3 % der platzierten Boxen hatten vor dieser Prüfung
+    0 % Auflage, siehe ERGEBNIS.md "Nachtrag"). Summiert die überlappende Fläche jeder Box, deren Oberkante
+    genau bei z liegt, und vergleicht die Summe mit der Grundfläche - das genügt für disjunkte, nicht
+    überlappende Boxen, weil ihre Deckflächen sich nicht gegenseitig überdecken können."""
+    if z <= 1e-9:
+        return True
+    area = w * d
+    if area <= 0:
+        return True
+    covered = 0.0
+    x1, y1 = x + w, y + d
+    for p in placed:
+        if abs((p.z + p.box.h) - z) > 1e-6:
+            continue
+        ox = max(0.0, min(x1, p.x + p.box.w) - max(x, p.x))
+        oy = max(0.0, min(y1, p.y + p.box.d) - max(y, p.y))
+        covered += ox * oy
+        if covered >= area - 1e-6:
+            return True
+    return covered >= area - 1e-6
+
+
 def _seed_points(W: float, D: float, contour: str, chamfer: float) -> set[tuple[float, float, float]]:
     """Anfangs-Kandidaten am Boden: der Ursprung bei Rechteck-Kontur liegt bei einer gerundeten Kontur
     selbst außerhalb der Kontur (die Ecke ist ja gerade abgeschnitten) - der Extreme-Point-Algorithmus
@@ -74,6 +99,8 @@ def try_place(box: Box, placed: list[Placed], W: float, D: float, H: float, cont
         if x + box.w > W + 1e-9 or y + box.d > D + 1e-9 or z + box.h > H + 1e-9:
             continue
         if not corners_ok(x, y, box.w, box.d, W, D, contour, chamfer):
+            continue
+        if not _fully_supported(x, y, box.w, box.d, z, placed):
             continue
         cand = Placed(box, x, y, z)
         if any(_overlaps(cand, p) for p in placed):

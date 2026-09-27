@@ -37,7 +37,8 @@ Größenordnung realer ULD-Schwerpunktgrenzen (IATA ULD Technical Manual), ist a
 
 ## Befunde beim Bauen (Vorab-Messreihe, siehe `packen-planung/messreihe_uld_gewicht/ERGEBNIS.md`)
 
-Zwei Bugs wurden in der Vorab-Messreihe gefunden und mit Regressionstests abgesichert (siehe `tests/test_geometry.py`):
+Drei Bugs wurden gefunden (zwei beim Bauen, einer erst vom Nutzer an der laufenden App) und mit Regressionstests abgesichert (siehe
+`tests/test_geometry.py`):
 
 - **Nullspalten-Signal:** die gerundete Kontur schneidet genau den Ursprung ab; die Extreme-Point-Heuristik startete anfangs nur dort, wodurch
   0 von 200 Instanzen überhaupt etwas platzierten. Behoben durch eigene Start-Kandidaten an den acht Eckpunkten der Kontur
@@ -45,6 +46,14 @@ Zwei Bugs wurden in der Vorab-Messreihe gefunden und mit Regressionstests abgesi
 - **Wirkungslose Zielregel:** die schwerpunkt-bewusste Regel hatte anfangs **höhere** Verletzungsraten als die reine Volumen-Regel, weil der
   ersten, schwersten Box nur der Ursprung als Kandidat zur Verfügung stand - die "Vorzug Mitte"-Regel griff ins Leere. Behoben durch ein
   zusätzliches Bodenraster (`uldg_geometry._floor_grid`).
+- **Schwebende/kippende Boxen (nach dem Deploy vom Nutzer gemeldet):** das Platzierungsverfahren prüfte nur Überlappung und Kontur, nie ob
+  die gesamte Grundfläche einer Box tatsächlich aufliegt (Boden oder Oberkante bereits platzierter Boxen) - ein Extreme-Point aus der
+  oberen Kante einer kleineren Box erlaubte, eine größere Box teilweise oder ganz darüber schweben zu lassen. Gemessen an 100
+  Zufallsinstanzen vor der Behebung: **2,3 %** der platzierten Boxen hatten **0 %** Auflage, **4,3 %** unter 50 % Auflage. Behoben durch
+  eine `_fully_supported()`-Prüfung (Boden **oder** lückenlose Deckung durch tieferliegende Boxoberkanten) in `uldg_geometry.try_place()`,
+  mit vier neuen Checks und der kompletten Messreihe neu gerechnet - **alle Zahlen unten sind bereits die korrigierte Fassung.** Mit der
+  zusätzlichen Nebenbedingung "vollständig aufgelegt" landen Boxen seltener zufällig in einer schwerpunkt-zentrierenden Position, darum
+  liegen die Verletzungsraten unten durchweg höher als vor der Behebung.
 
 ## Befunde (gemessen, keine Behauptungen)
 
@@ -52,16 +61,16 @@ Alle Zahlen aus `data/uldg_results.json` (54 Zellen × 200 gepaarte Instanzen), 
 
 | Frage | Befund |
 |---|---|
-| Verletzt eine reine Volumen-Packung das Schwerpunktfenster? | Ja, meistens: Rechteck-Kontur, 16 Boxen, Dichtestreuung 0,3, Toleranz 10 % - **74,5 %** der Instanzen verletzt. |
-| Hilft die schwerpunkt-bewusste Regel? | Deutlich, aber nicht bis auf null: senkt auf **38,0 %** (−36,5 Prozentpunkte) in derselben Zelle. |
-| Reicht sie bei enger Toleranz (5 %)? | **Nein:** bleibt bei **77,5 %** (von 95,5 % bei H_vol) - eine einfache Platzierungsregel allein reicht dort nicht. |
-| Verschwindet der Unterschied bei loser Toleranz (20 %)? | Fast: H_vol verletzt nur noch **9,5 %**, die Regel ist dort kaum noch nötig. |
-| Was kostet die Schwerpunktregel an Volumen? | Praktisch nichts: Auslastungsdifferenz H_cg gegen H_vol über alle 54 Zellen zwischen **−1,6 %** und **+0,1 Prozentpunkten** (Mittel −0,17 pp). |
-| Wo zeigt sich der Preis dann? | Bei vielen Boxen und hoher Dichtestreuung in unplatzierten Boxen: gerundet, 24 Boxen, Dichtestreuung 0,6, Toleranz 10 % - **0,82** unplatzierte Boxen im Mittel bei H_cg gegen **0,045** bei H_vol. |
-| Was kostet die gerundete Kontur? | **13,3 %** nutzbares Volumen bei gleicher Außenhülle (3,84 gegen 3,33 Mio. cm³). |
-| Hilft die Regel in jeder Zelle? | **Nein** - in mehreren der 54 Zellen ist der Gewinn negativ (H_cg schlechter als H_vol); das ist ein gemessener Befund, kein verschwiegener Ausreisser (siehe `tests/test_results.py::test_gain_pp_kann_negativ_sein_regel_hilft_nicht_immer`). |
+| Verletzt eine reine Volumen-Packung das Schwerpunktfenster? | Ja, meistens: Rechteck-Kontur, 16 Boxen, Dichtestreuung 0,3, Toleranz 10 % - **90,5 %** der Instanzen verletzt. |
+| Hilft die schwerpunkt-bewusste Regel? | Deutlich, aber nicht bis auf null: senkt auf **26,0 %** (−64,5 Prozentpunkte) in derselben Zelle. |
+| Reicht sie bei enger Toleranz (5 %)? | **Nein:** bleibt bei **73,0 %** (von 98,0 % bei H_vol) - eine einfache Platzierungsregel allein reicht dort nicht. |
+| Verschwindet der Unterschied bei loser Toleranz (20 %)? | Fast: H_vol verletzt nur noch **23,5 %**, H_cg senkt das in dieser Zelle auf **0 %**. |
+| Was kostet die Schwerpunktregel an Volumen? | Klein, aber seit dem Auflage-Fix messbar: Auslastungsdifferenz H_cg gegen H_vol über alle 54 Zellen zwischen **−4,2 %** und **≈0 Prozentpunkten** (Mittel −0,96 pp) - vor der Behebung war sie mit −1,6 bis +0,1 pp praktisch vernachlässigbar. |
+| Wo zeigt sich der Preis dann? | Bei vielen Boxen und hoher Dichtestreuung in unplatzierten Boxen: gerundet, 24 Boxen, Dichtestreuung 0,6, Toleranz 10 % - **8,71** unplatzierte Boxen im Mittel bei H_cg gegen **6,73** bei H_vol. |
+| Was kostet die gerundete Kontur? | **13,3 %** nutzbares Volumen bei gleicher Außenhülle (3,84 gegen 3,33 Mio. cm³) - unverändert durch den Auflage-Fix, hängt nicht von der Platzierungsregel ab. |
+| Hilft die Regel in jeder Zelle? | In dieser (neu gerechneten) Messreihe **ja** - anders als vor dem Auflage-Fix ist der Gewinn in allen 54 Zellen positiv (kleinster Wert 1,5 Prozentpunkte); vor der Behebung gab es Zellen mit negativem Gewinn, das war selbst ein damals dokumentierter Bug (siehe "Befunde beim Bauen"). Kein Beweis, dass das für jede denkbare Instanz gilt - nur der gemessene Befund dieser Stichprobe (siehe `tests/test_results.py::test_gain_pp_ist_in_dieser_messreihe_nie_negativ`). |
 
-Verteilung des Urteils über alle 54 gemessenen Zellen: **13** "Schwerpunktregel hilft deutlich", **27** "hilft, reicht aber nicht", **14**
+Verteilung des Urteils über alle 54 gemessenen Zellen: **25** "Schwerpunktregel hilft deutlich", **22** "hilft, reicht aber nicht", **7**
 "Toleranz ohnehin unkritisch" (siehe `uldg_results.py`, App-Abschnitt "Regime").
 
 ## Ehrliche Grenzen
@@ -96,12 +105,12 @@ Toleranzfenster um die geometrische Mitte, plus eine Container-**Kontur** als zw
 
 ## Tests
 
-112 Tests, Laufzeit unter 10 s (`_venvs/test/Scripts/python.exe -m pytest tests -v`):
+116 Tests, Laufzeit unter 10 s (`_venvs/test/Scripts/python.exe -m pytest tests -v`):
 
-- `tests/test_model_units.py`, `tests/test_geometry.py` - die 25 Korrektheits-Checks aus `messreihe_uld_gewicht/check.py` (Handinstanzen,
-  Kontur-Grenzfälle, Monte-Carlo-Volumenschätzung, 1200 Zufallspackungen ohne Ueberlappung/Gewichtsfehler/Konturverletzung), plus zwei
-  PFLICHT-Regressionstests für die beiden beim Bauen gefundenen Bugs und zusätzliche Grenzfall-/Tiebreak-Tests, die die
-  Fehler-Einbau-Prüfung aufgedeckt hat.
+- `tests/test_model_units.py`, `tests/test_geometry.py` - die 29 Korrektheits-Checks aus `messreihe_uld_gewicht/check.py` (Handinstanzen,
+  Kontur-Grenzfälle, Monte-Carlo-Volumenschätzung, 1200 Zufallspackungen ohne Ueberlappung/Gewichtsfehler/Konturverletzung/fehlende
+  Auflage), plus drei PFLICHT-Regressionstests für die drei beim Bauen bzw. nach dem Deploy gefundenen Bugs (Nullspalte, wirkungslose
+  Zielregel, schwebende/kippende Boxen) und zusätzliche Grenzfall-/Tiebreak-Tests, die die Fehler-Einbau-Prüfung aufgedeckt hat.
 - `tests/test_frozen_reference.py` - vier eingefrorene Boxlisten (feste Zahlenwerte, keine Zufallsziehung zur Testzeit), CI-robust gegen
   NumPy-Versionsdrift.
 - `tests/test_results.py`, `tests/test_format.py` - Zell-Zuordnung (AP 0: alle 54 Reglerkombinationen liegen exakt auf einer gemessenen

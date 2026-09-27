@@ -157,7 +157,9 @@ def test_all_three_judgment_states_are_reachable_through_the_controls():
     assert R.STATE_LABEL[R.STATE_DEUTLICH] in " ".join(i.value for i in at.info)
     at = fresh(contour="rechteck", n="16", cv="0.3", tol="0.05")  # eng: "nicht ausreichend"
     assert R.STATE_LABEL[R.STATE_NICHT_AUSREICHEND] in " ".join(i.value for i in at.info)
-    at = fresh(contour="rechteck", n="16", cv="0.3", tol="0.20")  # lose: "unkritisch"
+    # rechteck/16/0.3/0.20 (das "Lose Toleranz"-Preset) liegt seit dem Auflage-Fix bei 23,5 % Verletzungsrate
+    # und damit nicht mehr unter der UNKRITISCH-Schwelle (15 %) - rechteck/24/0.3/0.20 ist es weiterhin (10 %).
+    at = fresh(contour="rechteck", n="24", cv="0.3", tol="0.20")  # lose + mehr Boxen: "unkritisch"
     assert R.STATE_LABEL[R.STATE_UNKRITISCH] in " ".join(i.value for i in at.info)
 
 
