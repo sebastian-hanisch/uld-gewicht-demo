@@ -155,7 +155,7 @@ st.markdown("**1 · Verletzungsrate über die Toleranz** (feste Kontur/Dichtestr
 tol_rows = R.tol_rows(DATA, contour, cv, n_boxes)
 st.plotly_chart(V.violation_rate_figure(tol_rows), width="stretch", key="core_violation")
 st.caption("H_vol ignoriert das Gewicht komplett, H_cg bevorzugt Positionen nahe der Mitte für die schwereren "
-           "Boxen. Bei loser Toleranz (20 %) verschwindet der Unterschied fast, bei enger Toleranz (5 %) bleibt "
+           "Boxen. Bei loser Toleranz (20 %) sinken beide Verletzungsraten (bei 16 und 24 Boxen verletzt H_vol nur noch in höchstens 42,5 % der Instanzen), bei enger Toleranz (5 %) bleibt "
            "auch H_cg mehrheitlich außerhalb des Fensters.")
 
 st.markdown("**2 · Kontur-Volumenverlust** – wie viel nutzbares Volumen kostet die Rumpfkontur bei gleicher Außenhülle?")
@@ -263,8 +263,8 @@ leichte Boxen wie H_vol.
 **Schwerpunkt.** Gewichtetes Mittel der Boxmitten, Offset zur geometrischen Mitte in x und y; eine Packung
 verletzt das Fenster, wenn |Offset| die Toleranz in x **oder** y überschreitet.
 
-**Warum der Volumenpreis der Schwerpunktregel praktisch null ist.** H_cg bevorzugt zentrumsnahe Positionen,
-ändert aber nicht, WELCHE Boxen platziert werden - nur WO. Der Preis zeigt sich stattdessen in mehr
+**Warum der Volumenpreis der Schwerpunktregel klein ist.** H_cg bevorzugt zentrumsnahe Positionen,
+ändert also vor allem, WO Boxen stehen, kaum das insgesamt platzierte Volumen. Der Preis zeigt sich stattdessen in mehr
 unplatzierten Boxen: die zentrumsnahen Bodenfelder werden von schweren Boxen belegt, später ankommenden
 Boxen fehlt dort Platz.
 
@@ -322,6 +322,6 @@ st.markdown("---")
 
 st.caption(
     "Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – "
-    "Operations Research und Machine Learning. Interesse an einer maßgeschneiderten Lösung für "
-    "Ihr Unternehmen? [Kontakt aufnehmen](https://sebastianhanisch.net/kontakt.html)"
+    "Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). "
+    "Mehr zum Thema: [Luftfracht optimieren](https://sebastianhanisch.net/luftfracht-optimierung.html)."
 )

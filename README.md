@@ -64,7 +64,7 @@ Alle Zahlen aus `data/uldg_results.json` (54 Zellen × 200 gepaarte Instanzen), 
 | Verletzt eine reine Volumen-Packung das Schwerpunktfenster? | Ja, meistens: Rechteck-Kontur, 16 Boxen, Dichtestreuung 0,3, Toleranz 10 % - **90,5 %** der Instanzen verletzt. |
 | Hilft die schwerpunkt-bewusste Regel? | Deutlich, aber nicht bis auf null: senkt auf **26,0 %** (−64,5 Prozentpunkte) in derselben Zelle. |
 | Reicht sie bei enger Toleranz (5 %)? | **Nein:** bleibt bei **73,0 %** (von 98,0 % bei H_vol) - eine einfache Platzierungsregel allein reicht dort nicht. |
-| Verschwindet der Unterschied bei loser Toleranz (20 %)? | Fast: H_vol verletzt nur noch **23,5 %**, H_cg senkt das in dieser Zelle auf **0 %**. |
+| Verschwindet der Unterschied bei loser Toleranz (20 %)? | Er schrumpft stark (von 64,5 auf 23,5 Prozentpunkte): H_vol verletzt nur noch **23,5 %**, H_cg senkt das in dieser Zelle auf **0 %**. |
 | Was kostet die Schwerpunktregel an Volumen? | Klein, aber seit dem Auflage-Fix messbar: Auslastungsdifferenz H_cg gegen H_vol über alle 54 Zellen zwischen **−4,2 %** und **≈0 Prozentpunkten** (Mittel −0,96 pp) - vor der Behebung war sie mit −1,6 bis +0,1 pp praktisch vernachlässigbar. |
 | Wo zeigt sich der Preis dann? | Bei vielen Boxen und hoher Dichtestreuung in unplatzierten Boxen: gerundet, 24 Boxen, Dichtestreuung 0,6, Toleranz 10 % - **8,71** unplatzierte Boxen im Mittel bei H_cg gegen **6,73** bei H_vol. |
 | Was kostet die gerundete Kontur? | **13,3 %** nutzbares Volumen bei gleicher Außenhülle (3,84 gegen 3,33 Mio. cm³) - unverändert durch den Auflage-Fix, hängt nicht von der Platzierungsregel ab. |
@@ -162,3 +162,5 @@ streamlit run app.py
 ---
 
 Gebaut mit Streamlit, Plotly, NumPy und fpdf2.
+
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zum Thema: [Luftfracht optimieren](https://sebastianhanisch.net/luftfracht-optimierung.html).
