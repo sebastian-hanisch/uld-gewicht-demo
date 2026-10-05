@@ -56,8 +56,8 @@ Grundfläche - wie viel **nutzbares Volumen** kostet das? Die Demo zeigt live **
 vorgerechnet die Messreihe über **200 Instanzen je Zelle**, die die Aussage trägt. Das Platzierungsverfahren
 (Extreme-Point-Heuristik) kennt man aus `pack_demo`; die Schwerpunkt-/Momentengrenze als Nebenbedingung ist mit
 `stauplanung-demo` verwandt (dort ein diskretes Stapel-Raster statt kontinuierlichem 3D-Packen). Wie das Modell
-funktioniert, steht im Expander „Wie funktioniert diese Demo?" weiter unten, die formale Beschreibung im
-Expander „📐 Mathematische Formulierung".
+funktioniert, steht im Expander „Wie funktioniert diese Demo?“ weiter unten, die formale Beschreibung im
+Expander „📐 Mathematische Formulierung“.
 """
 )
 
@@ -283,7 +283,7 @@ neu gerechnet - alle Zahlen in dieser Demo sind bereits die korrigierte Fassung.
 
 - Boxgrößen, Dichteverteilung, Containermasse und Fase erfunden, nicht kalibriert. Die Schwerpunkt-Toleranz
   orientiert sich an der Größenordnung realer ULD-Schwerpunktgrenzen (IATA ULD Technical Manual), ist aber
-  keine Uebernahme einer konkreten Tabelle.
+  keine Übernahme einer konkreten Tabelle.
 - Feste Orientierung je Box vereinfacht gegenüber `pack_demo` (sechs Rotationen).
 - Kein Vergleich gegen ein exaktes Optimum: 3D-Packen mit Kontur ist für einen ILP-Vergleich aufwendig.
 - Die schwerpunkt-bewusste Regel reicht bei enger Toleranz (5 %) nicht aus (Restverletzung bleibt hoch); ein

@@ -67,7 +67,7 @@ def gain_pp(cell: dict) -> float:
 def judgment(cell: dict) -> str:
     """Drei Zustände (Kernabschnitt). Fällt der Gewinn negativ aus (H_cg schlechter als H_vol - kommt in
     dieser Messreihe in mehreren Zellen vor, siehe ERGEBNIS.md-Nebenbefunde), zählt das ausdrücklich zu
-    „hilft, reicht aber nicht": die Regel ist dort keine verlässliche Verbesserung."""
+    „hilft, reicht aber nicht“: die Regel ist dort keine verlässliche Verbesserung."""
     if cell["violation_rate_vol"] < UNKRITISCH_VOL_MAX:
         return STATE_UNKRITISCH
     if gain_pp(cell) >= 100.0 * DEUTLICH_MIN_GAIN and cell["violation_rate_cg"] <= DEUTLICH_MAX_CG:

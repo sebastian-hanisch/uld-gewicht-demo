@@ -33,7 +33,7 @@ Rumpf angepasste, an den vier Ecken abgeschnittene Grundfläche - eine zweite, u
   mit Vorzug für die zulässige Position nahe der Container-Mitte; leichte Boxen wie H_vol).
 
 Boxgrößen, Dichteverteilung, Containermasse und Fase sind erfunden, nicht kalibriert. Die Schwerpunkt-Toleranz orientiert sich an der
-Größenordnung realer ULD-Schwerpunktgrenzen (IATA ULD Technical Manual), ist aber **keine Uebernahme einer konkreten Tabelle**.
+Größenordnung realer ULD-Schwerpunktgrenzen (IATA ULD Technical Manual), ist aber **keine Übernahme einer konkreten Tabelle**.
 
 ## Befunde beim Bauen (Vorab-Messreihe, siehe `packen-planung/messreihe_uld_gewicht/ERGEBNIS.md`)
 
@@ -108,7 +108,7 @@ Toleranzfenster um die geometrische Mitte, plus eine Container-**Kontur** als zw
 116 Tests, Laufzeit unter 10 s (`_venvs/test/Scripts/python.exe -m pytest tests -v`):
 
 - `tests/test_model_units.py`, `tests/test_geometry.py` - die 29 Korrektheits-Checks aus `messreihe_uld_gewicht/check.py` (Handinstanzen,
-  Kontur-Grenzfälle, Monte-Carlo-Volumenschätzung, 1200 Zufallspackungen ohne Ueberlappung/Gewichtsfehler/Konturverletzung/fehlende
+  Kontur-Grenzfälle, Monte-Carlo-Volumenschätzung, 1200 Zufallspackungen ohne Überlappung/Gewichtsfehler/Konturverletzung/fehlende
   Auflage), plus drei PFLICHT-Regressionstests für die drei beim Bauen bzw. nach dem Deploy gefundenen Bugs (Nullspalte, wirkungslose
   Zielregel, schwebende/kippende Boxen) und zusätzliche Grenzfall-/Tiebreak-Tests, die die Fehler-Einbau-Prüfung aufgedeckt hat.
 - `tests/test_frozen_reference.py` - vier eingefrorene Boxlisten (feste Zahlenwerte, keine Zufallsziehung zur Testzeit), CI-robust gegen
@@ -123,7 +123,7 @@ Toleranzfenster um die geometrische Mitte, plus eine Container-**Kontur** als zw
   wirkungslosen Regler, PDF-Download, keine toten Datei-Links.
 
 Zusätzlich: `tools/mutation_check.py` (Fehler-Einbau-Test für `uldg_model.py`/`uldg_geometry.py`, 37 handverlesene Mutanten, siehe
-`tools/mutants.py` für die Einordnung der sechs gleichwertigen Ueberlebenden) und `tools/check_full.py` (volles Bau-Gate: Wiederholung der
+`tools/mutants.py` für die Einordnung der sechs gleichwertigen Überlebenden) und `tools/check_full.py` (volles Bau-Gate: Wiederholung der
 Messreihe gegen `data/uldg_results.json`, siehe "Ehrliche Grenzen" oben).
 
 ## Dateistruktur
