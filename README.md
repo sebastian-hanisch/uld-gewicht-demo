@@ -2,7 +2,7 @@
 
 **[→ Demo live ausprobieren](https://sebastianhanisch-uld-gewicht-demo.streamlit.app/)**
 
-Ausbau von [`pack_demo`](https://github.com/sebastian-hanisch/pack_demo) (Extreme-Point-Verfahren für Luftfracht-ULDs, hebt dessen Annahme
+Ausbau von [`pack-demo`](https://github.com/sebastian-hanisch/pack-demo) (Extreme-Point-Verfahren für Luftfracht-ULDs, hebt dessen Annahme
 "keine Gewichtsverteilung" gezielt auf): ein ULD wird nach Volumen gepackt, ohne auf das Gewicht der Boxen zu achten - hält das automatisch
 den **Schwerpunkt** in der zulässigen Toleranz um die geometrische Mitte? Und was kostet eine an die Rumpfkontur angepasste Grundfläche
 (LD3-artig, an den Ecken abgeschnitten) an nutzbarem Volumen gegenüber einer Palette? Die Demo zeigt live **eine Instanz** mit zwei Regeln
@@ -93,7 +93,7 @@ Verteilung des Urteils über alle 54 gemessenen Zellen: **25** "Schwerpunktregel
 Kernmodell: **gewichtete Positionierung mit Schwerpunkt-/Momentengrenze**, hier als kontinuierliches 3D-Packen mit einem zweiachsigen
 Toleranzfenster um die geometrische Mitte, plus eine Container-**Kontur** als zweite, unabhängige Frage.
 
-- **[`pack_demo`](https://github.com/sebastian-hanisch/pack_demo):** derselbe Extreme-Point-Kern, dieselbe Kulisse (Luftfracht-ULD) - `pack_demo`
+- **[`pack-demo`](https://github.com/sebastian-hanisch/pack-demo):** derselbe Extreme-Point-Kern, dieselbe Kulisse (Luftfracht-ULD) - `pack-demo`
   nennt Gewichtsverteilung selbst als "bewusst nicht enthalten"; dieses Stück ist die nachgeholte Erweiterung, als eigenes Repo statt
   Nachrüstung.
 - **[`stauplanung-demo`](https://github.com/sebastian-hanisch/stauplanung-demo):** echte Verwandtschaft im Muster "gewichtete Objekte
