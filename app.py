@@ -61,6 +61,17 @@ Expander „📐 Mathematische Formulierung“.
 """
 )
 
+# erklaerseite:einfach:start (erzeugt von tools/set_demo_explainer.py (Website-Repo) aus tools/content/explainers/uld-schwerpunkt-erklaert.json, nicht von Hand ändern)
+with st.expander("💬 In einfachen Worten"):
+    st.markdown(
+        """
+Ein Luftfracht-Container (ULD) wird mit Kisten gefüllt. Die Kisten sind verschieden groß und verschieden schwer. Der Schwerpunkt der ganzen Ladung soll in einem schmalen Fenster um die Mitte des Bodens liegen. Die Demo packt zufällige Kisten mit zwei Regeln. Die Volumenregel setzt die größte Kiste zuerst und ignoriert das Gewicht. Die schwerpunkt-bewusste Regel setzt die schweren Kisten zuerst und möglichst nah an die Mitte. Sie sehen eine einzelne Beladung und daneben die vorgerechnete Messreihe über viele zufällige Beladungen: wie oft das Fenster verfehlt wird, was die zweite Regel an Platz kostet und was ein abgeschrägter Boden ändert. Alle Kistenmaße und Gewichte sind erfunden.
+
+[Ausführlich und verständlich erklärt, mit Fachteil](https://sebastianhanisch.net/uld-schwerpunkt-erklaert.html)
+        """
+    )
+# erklaerseite:einfach:end
+
 st.caption("🎯 Schnellstart – ein Beispielszenario laden:")
 preset_names = list(C.PRESETS)
 for row in (preset_names[:3], preset_names[3:]):
@@ -168,9 +179,9 @@ with c2:
                 "Außenhülle 160 × 150 × 160 cm. Interessant: sie senkt dabei auch die Verletzungsrate "
                 f"({fmt_pct(R.find_cell(DATA, 'gerundet', tol, cv, n_boxes)['violation_rate_vol'])} statt "
                 f"{fmt_pct(R.find_cell(DATA, 'rechteck', tol, cv, n_boxes)['violation_rate_vol'])} bei H_vol, "
-                "gleiche Toleranz/Dichtestreuung/Boxzahl) - nicht weil die Kontur beim Zentrieren hilft, sondern "
-                "weil sie das Bodenraster stärker zur Mitte hin konzentriert (Nebeneffekt der Rasterwahl, keine "
-                "physikalische Aussage über gerundete ULDs).")
+                "gleiche Toleranz/Dichtestreuung/Boxzahl), in allen 27 gemessenen Zellenpaaren. Die Ursache ist hier "
+                "nicht untersucht; das Bodenraster erklärt es bei H_vol nicht, denn H_vol nutzt keines. "
+                "Keine physikalische Aussage über gerundete ULDs.")
     util_price = R.util_price_summary(DATA)
     st.markdown(f"**Volumenpreis der Schwerpunktregel:** Auslastungsdifferenz H_cg gegen H_vol über alle 54 "
                 f"Zellen zwischen {fmt_num(util_price['min'] * 100, 1, True)} und {fmt_num(util_price['max'] * 100, 1, True)} "
@@ -268,10 +279,10 @@ verletzt das Fenster, wenn |Offset| die Toleranz in x **oder** y überschreitet.
 unplatzierten Boxen: die zentrumsnahen Bodenfelder werden von schweren Boxen belegt, später ankommenden
 Boxen fehlt dort Platz.
 
-**Warum die gerundete Kontur die Verletzungsrate senkt, obwohl sie Volumen kostet.** Ein Nebeneffekt der
-Rasterwahl: das Bodenraster ist bei der gerundeten Kontur stärker zur Mitte hin konzentriert (die Randfelder
-in den abgeschnittenen Ecken fehlen), was indirekt zentrumsnahe Platzierung begünstigt - keine physikalische
-Aussage über gerundete ULDs.
+**Die gerundete Kontur senkt die Verletzungsrate, obwohl sie Volumen kostet.** Gemessen: bei H_vol liegt die
+Verletzungsrate der gerundeten Kontur in allen 27 Zellenpaaren (gleiche Toleranz, Dichtestreuung und Boxzahl)
+unter der des Rechtecks. Die Ursache ist nicht untersucht; das Bodenraster erklärt es für H_vol nicht, denn
+H_vol nutzt keines (es gibt es nur bei H_cg) - keine physikalische Aussage über gerundete ULDs.
 
 **Auflage-Fix (nach dem Deploy vom Nutzer gemeldet).** Boxen schwebten sichtbar in der Luft oder konnten kippen,
 weil das Platzierungsverfahren nur Überlappung und Kontur prüfte, nie ob die gesamte Grundfläche einer Box
@@ -296,6 +307,22 @@ neu gerechnet - alle Zahlen in dieser Demo sind bereits die korrigierte Fassung.
     )
 
 with st.expander("📐 Mathematische Formulierung"):
+    # erklaerseite:lesehilfe:start (erzeugt von tools/set_demo_explainer.py (Website-Repo) aus tools/content/explainers/uld-schwerpunkt-erklaert.json, nicht von Hand ändern)
+    st.markdown(
+        r"""
+**Lesehilfe.** Gegeben sind ein Container mit rechteckigem oder abgeschrägtem Boden, Kisten mit Maßen und Gewicht und ein Fenster um die Bodenmitte. Gesucht ist eine Platzierung der Kisten, bei der der Schwerpunkt der Ladung im Fenster liegt; die Demo zählt außerdem, wie viele Kisten draußen bleiben.
+
+| Symbol | Bedeutung |
+|---|---|
+| $W$, $D$, $H$ | Breite, Tiefe und Höhe des Containers |
+| $w_i$ | Gewicht der Kiste $i$ |
+| $(c_x, c_y)$ | Schwerpunkt der Ladung auf dem Boden |
+| $\tau$ | Toleranz: erlaubte Abweichung des Schwerpunkts von der Mitte, als Anteil der halben Kantenlänge |
+
+[Schritt für Schritt erklärt, mit Herleitung und Literatur](https://sebastianhanisch.net/uld-schwerpunkt-erklaert.html#fachleute)
+        """
+    )
+    # erklaerseite:lesehilfe:end
     st.markdown(
         r"""
 **Kontur (gerundet).** Punkt $(x, y)$ zulässig $\iff$ $x+y \ge c \,\land\, (W-x)+y \ge c \,\land\, x+(D-y) \ge c \,\land\, (W-x)+(D-y) \ge c$,

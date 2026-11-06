@@ -35,6 +35,6 @@ PRESET_HELP = {
     "Standard": "Rechteck, 16 Boxen, Dichtestreuung 0,3, Toleranz 10 %: reine Volumen-Packung verletzt das Schwerpunktfenster meistens, die Gegenregel hilft deutlich.",
     "Enge Toleranz": "Toleranz 5 %: hier reicht die einfache schwerpunkt-bewusste Regel allein nicht mehr.",
     "Lose Toleranz": "Toleranz 20 %: auch die reine Volumen-Packung verletzt das Fenster nur noch selten (23,5 %), die Gegenregel senkt das auf 0 % - der Abstand schrumpft (Standardfall: 64,5 Prozentpunkte).",
-    "Gerundetes ULD": "gerundete Kontur, sonst wie Standard: kostet Volumen, hilft aber überraschend beim Zentrieren (Bodenraster-Effekt).",
+    "Gerundetes ULD": "gerundete Kontur, sonst wie Standard: kostet Volumen, senkt aber (in allen 27 Zellenpaaren gemessen) die Verletzungsrate von H_vol; Ursache nicht untersucht.",
     "Viele, gemischte Boxen": "24 Boxen, Dichtestreuung 0,6: hier zeigt sich der eigentliche Preis der Schwerpunktregel - unplatzierte Boxen statt Volumen.",
 }

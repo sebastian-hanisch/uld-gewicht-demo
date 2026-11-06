@@ -79,9 +79,9 @@ Verteilung des Urteils über alle 54 gemessenen Zellen: **25** "Schwerpunktregel
 - **Feste Orientierung je Box** vereinfacht gegenüber `pack_demo` (dort sechs Rotationen).
 - **Die schwerpunkt-bewusste Regel reicht bei enger Toleranz nicht aus** - ein dritter, reparierender Schritt (Tausch schwerer Boxen, wie in
   `stauplanung-demo`s Reparatur-Heuristik) wäre eine Ausbauidee, ist hier bewusst nicht umgesetzt.
-- **Die gerundete Kontur senkt die Verletzungsrate über einen Nebeneffekt** (das Bodenraster ist dort stärker zur Mitte hin konzentriert),
-  nicht weil die Kontur selbst beim Zentrieren "hilft" - im Text und in der App ausdrücklich als Artefakt der Rasterwahl eingeordnet, nicht
-  als physikalische Aussage über gerundete ULDs.
+- **Die gerundete Kontur senkt die Verletzungsrate von H_vol** in allen 27 Zellenpaaren (gleiche Toleranz, Dichtestreuung und Boxzahl),
+  **die Ursache ist nicht untersucht**: das Bodenraster erklärt es für H_vol nicht (H_vol nutzt keines, es gibt es nur bei H_cg) - im Text
+  und in der App ausdrücklich nur als Messbefund eingeordnet, nicht als physikalische Aussage über gerundete ULDs.
 - **Kein bit-reproduzierbarer Sweep:** die Zellen-Seeds kommen aus `hash((contour, tol, cv, n))`, mechanisch unverändert aus dem
   verifizierten Vorab-Messreihen-Skript übernommen. Pythons `hash()` auf Strings ist pro Prozess zufällig gesalzen (PEP 456,
   `PYTHONHASHSEED`); der einmalige Referenzlauf hat sein Salt nicht aufgezeichnet. `tools/check_full.py` weist stattdessen
