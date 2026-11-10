@@ -7,7 +7,7 @@ Ausbau von [`pack-demo`](https://github.com/sebastian-hanisch/pack-demo) (Extrem
 den **Schwerpunkt** in der zulässigen Toleranz um die geometrische Mitte? Und was kostet eine an die Rumpfkontur angepasste Grundfläche
 (LD3-artig, an den Ecken abgeschnitten) an nutzbarem Volumen gegenüber einer Palette? Die Demo zeigt live **eine Instanz** mit zwei Regeln
 (H_vol, ignoriert Gewicht; H_cg, schwerpunkt-bewusst) auf zwei Konturen und vorgerechnet die Messreihe über **200 Instanzen je Zelle** (54
-Zellen), die die Aussage trägt.
+Zellen), die die Aussage belegt.
 
 ## Warum dieses Problem
 

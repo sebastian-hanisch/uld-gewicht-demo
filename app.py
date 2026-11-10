@@ -5,7 +5,7 @@ Sebastian Hanisch - Operations Research und Machine Learning
 Ausbau von pack_demo: eine reine Volumen-Packung ignoriert das Gewicht der Boxen. Bei Luftfracht-ULDs muss der
 Schwerpunkt der beladenen Einheit aber in einem Toleranzfenster um die geometrische Mitte liegen. Live: eine
 Instanz mit beiden Regeln (H_vol, H_cg) auf zwei Konturen. Vorgerechnet: die Messreihe über 200 Instanzen je
-Zelle (data/uldg_results.json), die die Aussage trägt.
+Zelle (data/uldg_results.json), die die Aussage belegt.
 
 Lauffähig mit: streamlit run app.py
 """
@@ -53,7 +53,7 @@ zulässigen Toleranz um die geometrische Mitte? Und was kostet es, das gezielt e
 ULDs nicht alle rechteckig: ein LD3 hat eine an die Rumpfkontur angepasste, an den Ecken abgeschnittene
 Grundfläche - wie viel **nutzbares Volumen** kostet das? Die Demo zeigt live **eine Instanz** mit beiden Regeln
 (**H_vol**, ignoriert Gewicht, wie `pack_demo`; **H_cg**, schwerpunkt-bewusst) auf beiden Konturen, und
-vorgerechnet die Messreihe über **200 Instanzen je Zelle**, die die Aussage trägt. Das Platzierungsverfahren
+vorgerechnet die Messreihe über **200 Instanzen je Zelle**, die die Aussage belegt. Das Platzierungsverfahren
 (Extreme-Point-Heuristik) kennt man aus `pack_demo`; die Schwerpunkt-/Momentengrenze als Nebenbedingung ist mit
 `stauplanung-demo` verwandt (dort ein diskretes Stapel-Raster statt kontinuierlichem 3D-Packen). Wie das Modell
 funktioniert, steht im Expander „Wie funktioniert diese Demo?“ weiter unten, die formale Beschreibung im
@@ -121,7 +121,7 @@ st.markdown("## 📦 Hält eine Volumen-Packung den Schwerpunkt ein?")
 st.caption(f"Live-Instanz (eine Instanz): Seed {seed}, {n_boxes} Boxen, Dichtestreuung {fmt_num(cv, 1)}, "
            f"Kontur {C.CONTOUR_LABEL[contour]}, Toleranz {fmt_pct(tol, 0)}. Beide Regeln laufen bei jeder "
            "Einstellung neu (unter 0,01 s, je Einstellung zwischengespeichert). Eine einzelne Instanz – die "
-           "vorgerechnete Messreihe unten trägt die Aussage.")
+           "vorgerechnete Messreihe unten belegt die Aussage.")
 
 m1, m2 = st.columns(2)
 with m1:
